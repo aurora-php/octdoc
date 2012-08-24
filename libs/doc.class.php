@@ -95,13 +95,13 @@ namespace octdoc {
             '#**'   => array(
                         'start'  => '^#\*\*',
                         'doc'    => '^#',
-                        'source' => array('^[^#]*', true),
+                        'source' => array('^([^#]|$)', true),
                         'end'    => '^#\*\*'
                     ),
             '%**'   => array(
                         'start'  => '^%\*\*',
                         'doc'    => '^%',
-                        'source' => array('^[^%]*', true),
+                        'source' => array('^([^%]|$)', true),
                         'end'    => '^%\*\*'
                     )
         );
