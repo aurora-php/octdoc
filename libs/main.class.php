@@ -71,6 +71,9 @@ namespace octdoc {
             } else {
                 $inp = $options['i'];
             }
+
+            $doc = new \octdoc\doc();
+            $doc->exec($inp);
         }
     }
 }
