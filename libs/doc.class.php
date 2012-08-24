@@ -276,6 +276,41 @@ namespace octdoc {
         /**/
 
         /**
+         * Instance of tar class.
+         *
+         * @octdoc  p:doc/$tar
+         * @var     \octdoc\tar
+         */
+        protected $tar = null;
+        /**/
+
+        /**
+         * Constructor.
+         *
+         * @octdoc  m:doc/__construct
+         */
+        public function __construct()
+        /**/
+        {
+        }
+
+        /**
+         * Return instance of tar class.
+         *
+         * @octdoc  m:doc/getTar
+         * @return  \octdoc\tar
+         */
+        protected function getTar()
+        /**/
+        {
+            if (is_null($this->tar)) {
+                $this->tar = new \octdoc\tar();
+            }
+
+            return $this->tar;
+        }
+
+        /**
          * Output message to STDERR.
          *
          * @octdoc  m:doc/log
@@ -515,7 +550,7 @@ namespace octdoc {
         protected function index($file, array $doc, array $source)
         /**/
         {
-            if (!($fp = fopen($file, 'w'))) {
+            if (!($fp = fopen('php://memory', 'w'))) {
                 $this->log("unable to open file '$file' for writing");
                 return false;
             }
@@ -600,6 +635,10 @@ namespace octdoc {
                 }
             }
 
+            rewind($fp);
+
+            $this->getTar()->addFile($file, stream_get_contents($fp));
+
             fclose($fp);
         }
 
@@ -613,7 +652,7 @@ namespace octdoc {
         protected function write($file, array $doc)
         /**/
         {
-            if (!($fp = fopen($file, 'w'))) {
+            if (!($fp = fopen('php://memory', 'w'))) {
                 $this->log("unable to open file '$file' for writing");
                 return false;
             }
@@ -733,6 +772,10 @@ namespace octdoc {
                 fputs($fp, "</dl>\n");
             }
 
+            rewind($fp);
+
+            $this->getTar()->addFile($file, stream_get_contents($fp));
+
             fclose($fp);
 
             return true;
@@ -815,15 +858,6 @@ namespace octdoc {
                 new \RecursiveDirectoryIterator($src)
             );
 
-            $tmp_dir = sys_get_temp_dir();
-            if (!($tmp_name = trim(`mktemp -d $tmp_dir/octdoc.XXXXXXXXXX 2>/dev/null`)) || !is_dir($tmp_name) || !is_writable($tmp_name)) {
-                $this->log('unable to create temporary directory \'$tmp_name\'');
-                die(1);
-            }
-
-            mkdir($tmp_name . '/tmp');
-            mkdir($tmp_name . '/doc');
-
             foreach ($iterator as $filename => $cur) {
                 $path = preg_replace('|^' . $src . '|', '', $cur->getPathName());
 
@@ -842,28 +876,20 @@ namespace octdoc {
                         continue;
                     }
 
-                    $parts[] = array(
-                        'scope' => $scope,
-                        'file'  => ($name = $tmp_name . '/doc/' . $name . '.html'),
-                        'type'  => $doc[0]['type'],
-                        'name'  => $doc[0]['scope']
-                    );
+                    // $parts[] = array(
+                    //     'scope' => $scope,
+                    //     'file'  => ($name = $tmp_name . '/doc/' . $name . '.html'),
+                    //     'type'  => $doc[0]['type'],
+                    //     'name'  => $doc[0]['scope']
+                    // );
 
-                    $this->write($name, $doc); //$scope, $doc);
+                    $this->write('doc/' . $name, $doc); //$scope, $doc);
                 }
             }
 
             $parts = $this->organize($parts);
 
-            $this->index($tmp_name . '/doc/index.html', array(), $parts);
-
-            passthru("cd $tmp_name && tar -cf - doc/", $ret);
-
-            // if ($ret !== 0) {
-            //     $this->log("error creating tar from documentation '$ret'");
-            // }
-
-            // `rm -rf $tmp_name 1>/dev/null 2>&1`;
+            $this->index('doc/index.html', array(), $parts);
         }
     }
 }
