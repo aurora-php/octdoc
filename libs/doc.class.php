@@ -876,14 +876,14 @@ namespace octdoc {
                         continue;
                     }
 
-                    // $parts[] = array(
-                    //     'scope' => $scope,
-                    //     'file'  => ($name = $tmp_name . '/doc/' . $name . '.html'),
-                    //     'type'  => $doc[0]['type'],
-                    //     'name'  => $doc[0]['scope']
-                    // );
+                    $parts[] = array(
+                        'scope' => $scope,
+                        'file'  => ($name = 'doc/' . $name . '.html'),
+                        'type'  => $doc[0]['type'],
+                        'name'  => $doc[0]['scope']
+                    );
 
-                    $this->write('doc/' . $name, $doc); //$scope, $doc);
+                    $this->write($name, $doc);
                 }
             }
 
