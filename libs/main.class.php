@@ -24,6 +24,7 @@
 namespace octdoc {
     require_once(__DIR__ . '/stdlib.class.php');
     require_once(__DIR__ . '/doc.class.php');
+    require_once(__DIR__ . '/tar.class.php');
     require_once(__DIR__ . '/pipe.class.php');
 
     /**
@@ -76,4 +77,9 @@ namespace octdoc {
             $doc->exec($inp);
         }
     }
+
+    // register error handler for 'normal' php errors
+    set_error_handler(function($code, $msg, $file, $line) {
+        throw new \ErrorException($msg, $code, 0, $file, $line);
+    }, E_ALL);
 }
