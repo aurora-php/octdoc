@@ -285,6 +285,15 @@ namespace octdoc {
         /**/
 
         /**
+         * Instance of text formatter.
+         *
+         * @octdoc  p:doc/$formatter
+         * @var     \octdoc\formatter
+         */
+        protected $formatter = null;
+        /**/
+
+        /**
          * Constructor.
          *
          * @octdoc  m:doc/__construct
@@ -298,7 +307,7 @@ namespace octdoc {
          * Return instance of tar class.
          *
          * @octdoc  m:doc/getTar
-         * @return  \octdoc\tar
+         * @return  \octdoc\tar                             Instance of tar class.
          */
         protected function getTar()
         /**/
@@ -308,6 +317,22 @@ namespace octdoc {
             }
 
             return $this->tar;
+        }
+
+        /**
+         * Return instance of text formatter.
+         *
+         * @octdoc  m:doc/getFormatter
+         * @return  \octdoc\format                          Instance of formatter class.
+         */
+        protected function getFormatter()
+        /**/
+        {
+            if (is_null($this->formatter)) {
+                $this->formatter = new \octdoc\format();
+            }
+
+            return $this->formatter;
         }
 
         /**
@@ -473,73 +498,6 @@ namespace octdoc {
         }
 
         /**
-         * Pipe something through pandoc. Either a file or a string can be converted.
-         *
-         * @octdoc  m:doc/pandoc
-         * @param   string                          $from           Convert from format.
-         * @param   string                          $to             Convert to format.
-         * @param   string|null                     $file           File to convert.
-         * @param   string|null                     $string         String to convert.
-         */
-        protected function pandoc($from, $to, $file, $string = null)
-        /**/
-        {
-            $return = '';
-
-            if (is_null($file) && is_null($string)) {
-                return $return;
-            }
-
-            $cmd = sprintf(
-                'pandoc -f %s -t %s',
-                escapeshellarg($from),
-                escapeshellarg($to)
-            );
-
-            $descriptors = array(
-                array('pipe', 'r'),
-                array('pipe', 'w'),
-                STDERR
-                // array('file', '/dev/null', 'w')
-            );
-
-            $pipes = array();
-
-            if (!($pp = proc_open($cmd, $descriptors, $pipes))) {
-                $this->log('unable to start pandoc');
-                return $return;
-            }
-
-            do {
-                if (!is_null($file)) {
-                    if (!($fp = fopen($file, 'r'))) {
-                        break;
-                    }
-
-                    while (!feof($fp)) {
-                        fputs($pipes[0], fgets($fp));
-                    }
-
-                    fclose($fp);
-                } elseif (!is_null($string)) {
-                    fputs($pipes[0], $string);
-                }
-
-                fclose($pipes[0]);
-
-                while (!feof($pipes[1])) {
-                    $return .= fgets($pipes[1]);
-                }
-
-                fclose($pipes[1]);
-
-                proc_close($pp);
-            } while(false);
-
-            return $return;
-        }
-
-        /**
          * Write documentation index to temporary directory.
          *
          * @octdoc  m:doc/index
@@ -679,7 +637,7 @@ namespace octdoc {
 
                 // write description
                 if (trim($part['text']) != '') {
-                    fputs($fp, $this->pandoc('markdown', 'html', null, $part['text']));
+                    fputs($fp, $this->getFormatter()->process($part['text']));
                 }
 
                 // write included source code
