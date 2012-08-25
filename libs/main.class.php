@@ -26,6 +26,7 @@ namespace octdoc {
     require_once(__DIR__ . '/doc.class.php');
     require_once(__DIR__ . '/tar.class.php');
     require_once(__DIR__ . '/pipe.class.php');
+    require_once(__DIR__ . '/format.class.php');
 
     /**
      * Main application class for octdoc.
