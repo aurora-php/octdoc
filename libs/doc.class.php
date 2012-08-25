@@ -621,6 +621,8 @@ namespace octdoc {
 
             foreach ($source as $section => $part) {
                 // section header
+                if (!isset($this->section[$section])) $section = '';
+
                 fputs($fp, sprintf("<h2>%s</h2>\n", $this->sections[$section]));
 
                 foreach ($part as $type => $files) {
