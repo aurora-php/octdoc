@@ -332,40 +332,6 @@ namespace octdoc {
 
                     // eat line
                     $line = '';
-                } elseif ($state == 0 && preg_match('/^\.\. {' . ($this->tab_width - 2) . '}(?P<type>[a-z0-3]+): (?P<args>[^, ]*(?:, *[^, ]*|)+)$/', $line, $match)) {
-                    // block plugin
-                    if ($buffer_cnt() > 0) {
-                        // buffer not empty -- process it first
-                        $eat = true;
-                        continue;
-                    }
-
-                    $e = $dom->createElement('plugin');
-                    $e->setAttribute('type', $match['type']);
-
-                    array_filter(
-                        explode(',', $match['args']),
-                        function($v) use (&$e) {
-                            static $i = 0;
-                            $e->setAttribute('param' . (++$i), trim($v));
-                        }
-                    );
-
-                    $parent = $parent->appendChild($e);
-                    ++$indent;
-                    $state = 1;
-
-                    // execute plugin for input processing
-                    $class    = 'lima_ltext_plugin_' . $match['type'];
-                    $instance = $class::getInstance();
-
-                    $instance->input();
-
-                    // eat line
-                    $line = '';
-    /*            } elseif ($state == 0 && preg_match('/^\[\d+\]: .+/', $line, $match)) {
-                    // footnote
-                    throw new Exception('footnote tobe implemented!'); */
                 } elseif ($state == 0 && preg_match('/^\+(-+\+)+$/', $line, $match)) {
                     // table
                     $line = $this->parseTable($parent, $fh, $line);
