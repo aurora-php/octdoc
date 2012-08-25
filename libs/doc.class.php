@@ -808,8 +808,6 @@ namespace octdoc {
                     $part['sortkey'] = $name;
                 }
 
-                if ($section == '') { print_r($part); die; }
-
                 if (!isset($return[$section])) $return[$section] = array();
 
                 // type
