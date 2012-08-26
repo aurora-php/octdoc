@@ -64,6 +64,61 @@ namespace octdoc\format {
         }
 
         /**
+         * Write header for index page.
+         *
+         * @octdoc  m:htmlraw/indexHeader
+         * @param   resource                        $fh             File handle to write header to.
+         * @param   string                          $title          Page title to write.
+         */
+        protected function indexHeader($fh, $title)
+        /**/
+        {
+            $this->pageHeader($fh, $title);
+        }
+
+        /**
+         * Write header for documentation page.
+         *
+         * @octdoc  m:htmlraw/pageHeader
+         * @param   resource                        $fh             File handle to write header to.
+         * @param   string                          $title          Page title to write.
+         */
+        protected function pageHeader($fh, $title)
+        /**/
+        {
+            fputs($fh, "<html>\n");
+            fputs($fh, "<head>\n");
+            fputs($fh, sprintf("<title>%s</title>\n", $title));
+            fputs($fh, "</head>\n");
+            fputs($fh, "<body>\n");
+        }
+
+        /**
+         * Write footer for index page.
+         *
+         * @octdoc  m:htmlraw/indexFooter
+         * @param   resource                        $fh             File handle to write header to.
+         */
+        protected function indexFooter($fh)
+        /**/
+        {
+            $this->pageFooter($fh);
+        }
+
+        /**
+         * Write footer for documentation page.
+         *
+         * @octdoc  m:htmlraw/pageFooter
+         * @param   resource                        $fh             File handle to write header to.
+         */
+        protected function pageFooter($fh)
+        /**/
+        {
+            fputs($fh, "</body>\n");
+            fputs($fh, "</html>\n");
+        }
+
+        /**
          * Write documentation index to temporary directory.
          *
          * @octdoc  m:htmlraw/index
@@ -79,11 +134,7 @@ namespace octdoc\format {
                 return false;
             }
 
-            fputs($fp, "<html>\n");
-            fputs($fp, "<head>\n");
-            fputs($fp, sprintf("<title>%s -- index</title>\n", $this->title));
-            fputs($fp, "</head>\n");
-            fputs($fp, "<body>\n");
+            $this->indexHeader($fp, sprintf('%s -- index', $this->title));
 
             fputs($fp, "<h1>Index</h1>\n");
 
@@ -167,8 +218,7 @@ namespace octdoc\format {
                 }
             }
 
-            fputs($fp, "</body>\n");
-            fputs($fp, "</html>\n");
+            $this->indexFooter($fp);
 
             rewind($fp);
 
@@ -180,23 +230,22 @@ namespace octdoc\format {
         /**
          * Write documentation for a specified file.
          *
-         * @octdoc  m:htmlraw/write
+         * @octdoc  m:htmlraw/page
          * @param   string                          $file           File to write documentation into.
+         * @param   string                          $title          Page title.
          * @param   array                           $doc            Documentation to write.
          */
-        public function write($file, array $doc)
+        public function page($file, $title, array $doc)
         /**/
         {
+            $file = 'doc/' . $file . '.html';
+
             if (!($fp = fopen('php://memory', 'w'))) {
                 \octdoc\stdlib::log("unable to open file '$file' for writing");
                 return false;
             }
 
-            fputs($fp, "<html>\n");
-            fputs($fp, "<head>\n");
-            fputs($fp, sprintf("<title>%s</title>\n", $this->title));
-            fputs($fp, "</head>\n");
-            fputs($fp, "<body>\n");
+            $this->pageHeader($fp, sprintf('%s -- %s', $this->title, $title));
 
             $type  = '';
             $depth = \octdoc\def::$depth['scope'];
@@ -316,8 +365,7 @@ namespace octdoc\format {
                 fputs($fp, "</dl>\n");
             }
 
-            fputs($fp, "</body>\n");
-            fputs($fp, "</html>\n");
+            $this->pageFooter($fp);
 
             rewind($fp);
 
