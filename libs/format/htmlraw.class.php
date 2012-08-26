@@ -198,7 +198,8 @@ namespace octdoc\format {
             fputs($fp, "</head>\n");
             fputs($fp, "<body>\n");
 
-            $type = '';
+            $type  = '';
+            $depth = \octdoc\def::$depth['scope'];
 
             foreach ($doc as $part) {
                 // write a section header
@@ -206,12 +207,14 @@ namespace octdoc\format {
                     $type = $part['type'];
 
                     fputs($fp, sprintf("<h%1\$d>%2\$s</h%1\$d>\n", \octdoc\def::$depth[$type], htmlentities(\octdoc\def::$types[$type])));
+
+                    $depth = \octdoc\def::$depth[$type] + 1;
                 }
 
                 if (($pos = strpos($part['scope'], '/')) !== false) {
                     fputs($fp, sprintf(
                         "<h%1\$d>%2\$s</h%1\$d>\n",
-                        \octdoc\def::$depth['scope'],
+                        $depth,
                         substr($part['scope'], $pos + 1)
                     ));
                 }
