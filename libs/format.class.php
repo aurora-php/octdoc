@@ -87,6 +87,26 @@ namespace octdoc {
         }
 
         /**
+         * Preprocess. This method get's called before the first page is written.
+         *
+         * @octdoc  m:format/preprocess
+         */
+        public function preprocess()
+        /**/
+        {
+        }
+
+        /**
+         * Preprocess. This method get's called after all pages and the index page have been written.
+         *
+         * @octdoc  m:format/preprocess
+         */
+        public function postprocess()
+        /**/
+        {
+        }
+
+        /**
          * Write documentation index to temporary directory.
          *
          * @octdoc  m:format/index
@@ -100,11 +120,12 @@ namespace octdoc {
         /**
          * Write documentation for a specified file.
          *
-         * @octdoc  m:format/write
+         * @octdoc  m:format/page
          * @param   string                          $file           File to write documentation into.
+         * @param   string                          $title          Page title.
          * @param   array                           $doc            Documentation to write.
          */
-        abstract public function write($file, array $doc);
+        abstract public function page($file, $title, array $doc);
         /**/
     }
 }
