@@ -376,6 +376,8 @@ namespace octdoc {
                 \octdoc\output::getInstance($this->output)
             );
 
+            $output->preprocess();
+
             $parts = array();
 
             $iterator = new \RecursiveIteratorIterator(
@@ -391,14 +393,15 @@ namespace octdoc {
                         continue;
                     }
 
-                    $scope = dirname($path) . '/' . preg_replace('/' . $strip . '/', '', basename($path));
-                    $name  = preg_replace('/[\/\.]/', '_', ltrim($scope, '/'));
-
                     if (!in_array($doc['0']['type'], array('h', 'c', 'i', 't'))) {
                         \octdoc\stdlib::log("first part in a file must be of type 'class', 'header', 'interface' or 'trait'", $doc[0]);
 
                         continue;
                     }
+
+                    $title = preg_replace('/' . $strip . '/', '', basename($path));
+                    $scope = dirname($path) . '/' . $title;
+                    $name  = preg_replace('/[\/\.]/', '_', ltrim($scope, '/'));
 
                     $refs = array_map(function($v) {
                         return $v['scope'];
@@ -406,19 +409,21 @@ namespace octdoc {
 
                     $parts[] = array(
                         'scope' => $scope,
-                        'file'  => ($name = 'doc/' . $name . '.html'),
+                        'file'  => $name,
                         'type'  => $doc[0]['type'],
                         'name'  => $doc[0]['scope'],
                         'refs'  => $refs
                     );
 
-                    $output->write($name, $doc);
+                    $output->page($name, $title, $doc);
                 }
             }
 
             $parts = $this->organize($parts);
 
-            $output->index('doc/index.html', array(), $parts);
+            $output->index('doc/index', array(), $parts);
+
+            $output->postprocess();
         }
     }
 }
