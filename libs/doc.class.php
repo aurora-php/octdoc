@@ -42,6 +42,15 @@ namespace octdoc {
         /**/
 
         /**
+         * Output target type.
+         *
+         * @octdoc  p:doc/$output
+         * @var     string
+         */
+        protected $output = 'tar';
+        /**/
+
+        /**
          * Docblock definitions.
          *
          * @octdoc  p:doc/$docblock
@@ -125,6 +134,30 @@ namespace octdoc {
         public function __construct()
         /**/
         {
+        }
+
+        /**
+         * Set output format.
+         *
+         * @octdoc  m:doc/setFormat
+         * @param   string                          $type           Output format.
+         */
+        public function setFormat($type)
+        /**/
+        {
+            $this->format = $type;
+        }
+
+        /**
+         * Set output target type.
+         *
+         * @octdoc  m:doc/setOutput
+         * @param   string                          $type           Output target type.
+         */
+        public function setOutput($type)
+        /**/
+        {
+            $this->output = $type;
         }
 
         /**
@@ -340,7 +373,7 @@ namespace octdoc {
 
             $output = \octdoc\format::getInstance(
                 $this->format,
-                \octdoc\output::getInstance('tar')
+                \octdoc\output::getInstance($this->output)
             );
 
             $parts = array();
