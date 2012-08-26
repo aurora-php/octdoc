@@ -33,6 +33,15 @@ namespace octdoc\format {
     /**/
     {
         /**
+         * Reference cataloge.
+         *
+         * @octdoc  p:htmlraw/$references
+         * @var     array
+         */
+        protected $references = array();
+        /**/
+
+        /**
          * Output handler.
          *
          * @octdoc  p:htmlraw/$output
@@ -169,16 +178,30 @@ namespace octdoc\format {
                 return $tree;
             };
 
-            /* write list to file */
-            $putList = function(array $tree, $level = 0) use ($fp, &$putList) {
+            /* write list to file and collect references */
+            $refs = array();
+
+            $putList = function(array $tree, $prefix = '') use ($fp, &$refs, &$putList) {
                 fputs($fp, "<ul>\n");
 
-                array_walk($tree, function($node, $key) use ($fp, &$tree, $putList) {
+                array_walk($tree, function($node, $key) use ($fp, &$tree, &$refs, $prefix, $putList) {
                     static $li = true;
 
                     next($tree);
 
                     if (is_int($key)) {
+                        array_walk($node['refs'], function($v) use (&$refs, $prefix, $node) {
+                            if ($v != $node['name']) {
+                                $path = ltrim($prefix . '/' . $v, '/');
+
+                                $refs[$path] = array(
+                                    'file' => $node['file'] . '.html',
+                                    'path' => $path,
+                                    'name' => $v
+                                );
+                            }
+                        });
+
                         fputs($fp, sprintf('<li><a href="%s">%s</a>', basename($node['file']), htmlentities($node['name'])));
 
                         if (!is_string(key($tree))) fputs($fp, '</li>');
@@ -189,7 +212,7 @@ namespace octdoc\format {
                             fputs($fp, '<li>' . $key);
                         }
 
-                        $putList($node);
+                        $putList($node, $prefix . '/' . $key);
 
                         fputs($fp, "</li>\n");
 
@@ -217,6 +240,8 @@ namespace octdoc\format {
                     }
                 }
             }
+
+            $this->references = array_merge($this->references, $refs);
 
             $this->indexFooter($fp);
 
