@@ -23,19 +23,19 @@
 
 namespace octdoc {
     /**
-     * Simple text formatter.
+     * Simple text to html converter.
      *
-     * @octdoc      c:octdoc/format
+     * @octdoc      c:octdoc/text2html
      * @copyright   copyright (c) 2012 by Harald Lapp
      * @author      Harald Lapp <harald@octris.org>
      */
-    class format
+    class text2html
     /**/
     {
         /**
          * Tab width.
          *
-         * @octdoc  p:format/$tab_width
+         * @octdoc  p:text2html/$tab_width
          * @var     int
          */
         protected $tab_width = 4;
@@ -44,7 +44,7 @@ namespace octdoc {
         /**
          * Headlines.
          *
-         * @octdoc  p:format/$headlines
+         * @octdoc  p:text2html/$headlines
          * @var     array
          */
         protected static $headlines = array(
@@ -56,7 +56,7 @@ namespace octdoc {
         /**
          * Inline parser pattern, to be filled by constructor.
          *
-         * @octdoc  p:format/$inline
+         * @octdoc  p:text2html/$inline
          * @var     string
          */
         protected static $inline = null;
@@ -65,7 +65,7 @@ namespace octdoc {
         /**
          * Constructor.
          *
-         * @octdoc  m:format/__construct
+         * @octdoc  m:text2html/__construct
          */
         public function __construct()
         /**/
@@ -86,7 +86,7 @@ namespace octdoc {
         /**
          * Set tab width of text to parse.
          *
-         * @octdoc  m:format/setTabWidth
+         * @octdoc  m:text2html/setTabWidth
          * @param   int                 $width                  Tab width.
          */
         public function setTabWidth($width)
@@ -98,7 +98,7 @@ namespace octdoc {
         /**
          * Process text.
          *
-         * @octdoc  m:format/process
+         * @octdoc  m:text2html/process
          * @param   string              $text                   Text to process.
          * @return  string                                      HTML snippet.
          */
@@ -127,7 +127,7 @@ namespace octdoc {
         /**
          * Get next line of input stream.
          *
-         * @octdoc  m:format/getNextLine
+         * @octdoc  m:text2html/getNextLine
          * @param   resource                $fh             File handle to read from.
          * @return  string                                  Read line.
          */
@@ -146,7 +146,7 @@ namespace octdoc {
         /**
          * Determine indent of line.
          *
-         * @octdoc  m:format/getIndent
+         * @octdoc  m:text2html/getIndent
          * @param   string                  $line           Text line.
          * @return  int                                     Indent of line.
          */
@@ -162,7 +162,7 @@ namespace octdoc {
         /**
          * Block parser.
          *
-         * @octdoc  m:format/parseBlock
+         * @octdoc  m:text2html/parseBlock
          * @param   \DOMNode                $parent         Parent DOM node to add parsed content to.
          * @param   resource                $fh             File handle to read from.
          */
@@ -350,7 +350,7 @@ namespace octdoc {
         /**
          * ASCII Table parser.
          *
-         * @octdoc  m:format/parseTable
+         * @octdoc  m:text2html/parseTable
          * @param   \DOMNode            $parent             Parent node to add table to.
          * @param   resource            $fh                 File handle to read from.
          * @param   string              $line               Current line to parse.
@@ -522,7 +522,7 @@ namespace octdoc {
         /**
          * Text parser.
          *
-         * @octdoc  m:format/processText
+         * @octdoc  m:text2html/processText
          * @param   \DOMNode        $parent                 Parent node to add text to.
          * @param   string          $text                   Text to parse.
          */
@@ -549,7 +549,7 @@ namespace octdoc {
         /**
          * Inline parser parses references (links) and text formattings.
          *
-         * @octdoc  m:format/parseInline
+         * @octdoc  m:text2html/parseInline
          * @param   \DOMNode                $parent                 Parent node.
          * @param   string                  $line                   Text to parse.
          */
@@ -625,7 +625,7 @@ namespace octdoc {
         /**
          * Convert tab characters to spaces.
          *
-         * @octdoc  m:format/deTab
+         * @octdoc  m:text2html/deTab
          * @param   string                  $txt                    Text string to detab.
          * @return  string                                          Detabbed text string.
          */
