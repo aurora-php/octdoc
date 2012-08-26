@@ -33,50 +33,12 @@ namespace octdoc {
     /**/
     {
         /**
-         * Name of project
-         *
-         * @octdoc  p:doc/$project
-         * @var     string
-         */
-        protected $project;
-        /**/
-
-        /**
-         * Output file.
-         *
-         * @octdoc  p:doc/$output
-         * @var     string|null
-         */
-        protected $output = null;
-        /**/
-
-        /**
          * Output format.
          *
          * @octdoc  p:doc/$format
          * @var     string
          */
-        protected $format = 'octdoc';
-        /**/
-
-        /**
-         * Supported output formats.
-         *
-         * @octdoc  p:doc/$formats
-         * @var     array
-         */
-        protected $formats = array(
-            'html', 'octdoc'
-        );
-        /**/
-
-        /**
-         * Dot command.
-         *
-         * @octdoc  p:doc/$cmd
-         * @var     string
-         */
-        protected $cmd = '';
+        protected $format = 'htmlraw';
         /**/
 
         /**
