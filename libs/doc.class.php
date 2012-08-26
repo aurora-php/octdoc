@@ -223,7 +223,7 @@ namespace octdoc {
                                 try {
                                     list($_type, $_name, $_text) = preg_split('/ +/', $row, 3);
                                 } catch(\Exception $e) {
-                                    $this->log('unable to parse @param in:', $tmp);
+                                    \octdoc\stdlib::log('unable to parse @param in:', $tmp);
                                     continue;
                                 }
 
@@ -241,7 +241,7 @@ namespace octdoc {
                                 try {
                                     list($_type, $_text) = preg_split('/ +/', $row, 2);
                                 } catch(\Exception $e) {
-                                    $this->log('unable to parse @return in:', $tmp);
+                                    \octdoc\stdlib::log('unable to parse @return in:', $tmp);
                                     continue;
                                 }
 
@@ -601,7 +601,7 @@ namespace octdoc {
                     $name  = preg_replace('/[\/\.]/', '_', ltrim($scope, '/'));
 
                     if (!in_array($doc['0']['type'], array('h', 'c', 'i', 't'))) {
-                        $this->log("first part in a file must be of type 'class', 'header', 'interface' or 'trait'", $doc[0]);
+                        \octdoc\stdlib::log("first part in a file must be of type 'class', 'header', 'interface' or 'trait'", $doc[0]);
 
                         continue;
                     }
