@@ -80,7 +80,7 @@ namespace octdoc {
         /**
          * Add file to output.
          *
-         * @octdoc      a:output/addFile
+         * @octdoc      m:output/addFile
          * @param       string          $filename               Name of file to add.
          * @param       string          $data                   Data to write.
          */
@@ -90,7 +90,7 @@ namespace octdoc {
         /**
          * Add directory to output
          *
-         * @octdoc      a:output/addDirectory
+         * @octdoc      m:output/addDirectory
          * @param       string          $directory              Name of directory to add.
          */
         abstract public function addDirectory($directory);
