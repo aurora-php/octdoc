@@ -66,7 +66,7 @@ namespace octdoc\format {
         /**
          * Write documentation index to temporary directory.
          *
-         * @octdoc  m:doc/index
+         * @octdoc  m:htmlraw/index
          * @param   string                          $file           File to write index into.
          * @param   array                           $doc            Generic module documentation.
          * @param   array                           $source         Documentation parts extracted from source code.

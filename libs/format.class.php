@@ -89,7 +89,7 @@ namespace octdoc {
         /**
          * Write documentation index to temporary directory.
          *
-         * @octdoc  a:doc/index
+         * @octdoc  a:format/index
          * @param   string                          $file           File to write index into.
          * @param   array                           $doc            Generic module documentation.
          * @param   array                           $source         Documentation parts extracted from source code.
@@ -100,7 +100,7 @@ namespace octdoc {
         /**
          * Write documentation for a specified file.
          *
-         * @octdoc  a:htmlraw/write
+         * @octdoc  a:format/write
          * @param   string                          $file           File to write documentation into.
          * @param   array                           $doc            Documentation to write.
          */
