@@ -54,23 +54,53 @@ namespace octdoc {
         {
             global $argv;
 
+            $formats = \octdoc\format::getTypes();
+            $targets = \octdoc\output::getTypes();
+
             // parse command-line arguments
             $missing = array();
             $options = stdlib::getOptions(array(
-                'i' => stdlib::T_OPT_REQUIRED
+                'i' => stdlib::T_OPT_REQUIRED,
+                'f' => stdlib::T_OPT_OPTIONAL,
+                't' => stdlib::T_OPT_OPTIONAL
             ), $missing);
 
             if (count($missing)) {
-                die(sprintf("usage: %s -i input-directory\n", $argv[0]));
+                die(sprintf("usage: %s -i input-directory [-f output-format] [-t output-target]\n", $argv[0]));
             }
 
+            // input directory
             if (!is_dir($options['i'])) {
                 die("no directory specified\n");
             } else {
                 $inp = $options['i'];
             }
 
+            // output format
+            if (isset($options['f'])) {
+                if (!in_array($options['f'], $formats)) {
+                    die(sprintf("unknown output format '%s'\n", $options['f']));
+                } else {
+                    $fmt = $options['f'];
+                }
+            } else {
+                $fmt = 'htmlraw';
+            }
+
+            // output target
+            if (isset($options['t'])) {
+                if (!in_array($options['t'], $targets)) {
+                    die(sprintf("unknown output target '%s'\n", $options['t']));
+                } else {
+                    $out = $options['t'];
+                }
+            } else {
+                $out = 'tar';
+            }
+
             $doc = new \octdoc\doc();
+            $doc->setFormat($fmt);
+            $doc->setOutput($out);
             $doc->exec($inp);
         }
     }
