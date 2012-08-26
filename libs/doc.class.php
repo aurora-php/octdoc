@@ -118,24 +118,6 @@ namespace octdoc {
         /**/
 
         /**
-         * Instance of tar class.
-         *
-         * @octdoc  p:doc/$tar
-         * @var     \octdoc\tar
-         */
-        protected $tar = null;
-        /**/
-
-        /**
-         * Instance of text formatter.
-         *
-         * @octdoc  p:doc/$formatter
-         * @var     \octdoc\formatter
-         */
-        protected $formatter = null;
-        /**/
-
-        /**
          * Constructor.
          *
          * @octdoc  m:doc/__construct
@@ -143,58 +125,6 @@ namespace octdoc {
         public function __construct()
         /**/
         {
-        }
-
-        /**
-         * Return instance of tar class.
-         *
-         * @octdoc  m:doc/getTar
-         * @return  \octdoc\tar                             Instance of tar class.
-         */
-        protected function getTar()
-        /**/
-        {
-            if (is_null($this->tar)) {
-                $this->tar = new \octdoc\tar();
-            }
-
-            return $this->tar;
-        }
-
-        /**
-         * Return instance of text formatter.
-         *
-         * @octdoc  m:doc/getFormatter
-         * @return  \octdoc\format                          Instance of formatter class.
-         */
-        protected function getFormatter()
-        /**/
-        {
-            if (is_null($this->formatter)) {
-                $this->formatter = new \octdoc\format();
-            }
-
-            return $this->formatter;
-        }
-
-        /**
-         * Output message to STDERR.
-         *
-         * @octdoc  m:doc/log
-         * @param   string                          $msg            Message to output.
-         * @param   array                           $payload        Optional additional information to output.
-         */
-        protected function log($msg, array $payload = null)
-        /**/
-        {
-            fputs(STDERR, trim($msg) . "\n");
-
-            if (!is_null($payload)) {
-                fputs(STDERR, sprintf("  file: %s\n", $payload['file']));
-                fputs(STDERR, sprintf("  line: %s\n", $payload['line']));
-            }
-
-            fputs(STDERR, "\n");
         }
 
         /**
