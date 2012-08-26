@@ -362,11 +362,16 @@ namespace octdoc {
                         continue;
                     }
 
+                    $refs = array_map(function($v) {
+                        return $v['scope'];
+                    }, $doc);
+
                     $parts[] = array(
                         'scope' => $scope,
                         'file'  => ($name = 'doc/' . $name . '.html'),
                         'type'  => $doc[0]['type'],
-                        'name'  => $doc[0]['scope']
+                        'name'  => $doc[0]['scope'],
+                        'refs'  => $refs
                     );
 
                     $this->write($name, $doc);
