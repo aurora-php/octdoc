@@ -44,6 +44,26 @@ namespace octdoc {
         /**/
 
         /**
+         * Output message to STDERR.
+         *
+         * @octdoc  m:stdlib/log
+         * @param   string                          $msg            Message to output.
+         * @param   array                           $payload        Optional additional information to output.
+         */
+        public static function log($msg, array $payload = null)
+        /**/
+        {
+            fputs(STDERR, trim($msg) . "\n");
+
+            if (!is_null($payload)) {
+                fputs(STDERR, sprintf("  file: %s\n", $payload['file']));
+                fputs(STDERR, sprintf("  line: %s\n", $payload['line']));
+            }
+
+            fputs(STDERR, "\n");
+        }
+
+        /**
          * Parse command line options and return Array of them. The parameters are required to have
          * the following format:
          *
