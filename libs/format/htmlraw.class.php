@@ -138,6 +138,8 @@ namespace octdoc\format {
         public function index($file, array $doc, array $source)
         /**/
         {
+            $file = 'doc/' . $file . '.html';
+
             if (!($fp = fopen('php://memory', 'w'))) {
                 \octdoc\stdlib::log("unable to open file '$file' for writing");
                 return false;
