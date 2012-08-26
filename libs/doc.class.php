@@ -307,12 +307,12 @@ namespace octdoc {
 
             // sort tree structure
             uksort($return, function($a, $b) {
-                return (array_search($a, $this->sort['sections']) - array_search($b, $this->sort['sections']));
+                return (array_search($a, \octdoc\def::$sort['sections']) - array_search($b, \octdoc\def::$sort['sections']));
             });
 
             foreach ($return as &$types) {
                 uksort($types, function($a, $b) {
-                    return (array_search($a, $this->sort['indextypes']) - array_search($b, $this->sort['indextypes']));
+                    return (array_search($a, \octdoc\def::$sort['indextypes']) - array_search($b, \octdoc\def::$sort['indextypes']));
                 });
 
                 foreach ($types as &$type) {
