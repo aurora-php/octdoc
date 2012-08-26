@@ -21,7 +21,7 @@
  * https://github.com/aurora/octdoc
  */
 
-namespace octdoc {
+namespace octdoc\output {
     /**
      * Utility class for creating 'tar' output.
      *
@@ -29,7 +29,7 @@ namespace octdoc {
      * @copyright   copyright (c) 2012 by Harald Lapp
      * @author      Harald Lapp <harald@octris.org>
      */
-    class tar
+    class tar extends \octdoc\output
     /**/
     {
         /**
