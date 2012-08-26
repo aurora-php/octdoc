@@ -338,6 +338,11 @@ namespace octdoc {
             $files   = '(' . implode('|', $this->files) . ')';
             $strip   = '(' . implode('|', $this->strip_extensions) . ')';
 
+            $output = \octdoc\format::getInstance(
+                $this->format,
+                \octdoc\output::getInstance('tar')
+            );
+
             $parts = array();
 
             $iterator = new \RecursiveIteratorIterator(
@@ -374,13 +379,13 @@ namespace octdoc {
                         'refs'  => $refs
                     );
 
-                    $this->write($name, $doc);
+                    $output->write($name, $doc);
                 }
             }
 
             $parts = $this->organize($parts);
 
-            $this->index('doc/index.html', array(), $parts);
+            $output->index('doc/index.html', array(), $parts);
         }
     }
 }
