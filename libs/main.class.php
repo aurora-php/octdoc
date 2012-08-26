@@ -62,11 +62,30 @@ namespace octdoc {
             $options = stdlib::getOptions(array(
                 'i' => stdlib::T_OPT_REQUIRED,
                 'f' => stdlib::T_OPT_OPTIONAL,
-                't' => stdlib::T_OPT_OPTIONAL
+                't' => stdlib::T_OPT_OPTIONAL,
+                'h' => stdlib::T_OPT_OPTIONAL
             ), $missing);
 
+            if (isset($options['h'])) {
+                print "octris documentation extractor\n";
+                print "copyright (c) 2012 by Harald Lapp <harald@octris.org>\n\n";
+                printf("usage: %s -h\n", $argv[0]);
+                printf("usage: %s -i input-directory [-f output-format] [-t output-target]\n\n", $argv[0]);
+                print "options\n\n";
+                print "    -i input-directory\n";
+                print "    -f output-format\n";
+                print "    -t output-target\n\n";
+                print "formats\n\n";
+                print "    " . implode("\n    ", $formats) . "\n\n";
+                print "targets\n\n";
+                print "    " . implode("\n    ", $targets) . "\n\n";
+                die(0);
+            }
+
             if (count($missing)) {
-                die(sprintf("usage: %s -i input-directory [-f output-format] [-t output-target]\n", $argv[0]));
+                printf("usage: %s -h\n", $argv[0]);
+                printf("usage: %s -i input-directory [-f output-format] [-t output-target]\n", $argv[0]);
+                die(0);
             }
 
             // input directory
