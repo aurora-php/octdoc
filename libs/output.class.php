@@ -51,9 +51,15 @@ namespace octdoc {
         public static function getTypes()
         /**/
         {
-            return array_map(function($v) {
-                return basename($v, '.class.php');
-            }, glob(__DIR__ . '/output/*.class.php'));
+            $types = array();
+
+            foreach (new \DirectoryIterator(__DIR__ . '/output/') as $file) {
+                if ($file->isFile() && preg_match('/\.class\.php$/', $name = $file->getFilename())) {
+                    $types[] = basename($name, '.class.php');
+                }
+            }
+
+            return $types;
         }
 
         /**
