@@ -25,7 +25,7 @@ namespace octdoc {
     /**
      * Common definitions.
      *
-     * @octdoc      c:octdoc\def
+     * @octdoc      c:octdoc/def
      * @copyright   copyright (c) 2012 by Harald Lapp
      * @author      Harald Lapp <harald@octris.org>
      */
