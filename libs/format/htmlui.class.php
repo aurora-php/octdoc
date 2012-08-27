@@ -70,11 +70,15 @@ namespace octdoc\format {
             font-size:   0.9em;
             margin:  0;
             padding: 0;
+            background-color: #eee;
+        }
+        a {
+            color: #aa0000;
         }
         #form {
             position:      fixed;
             border-bottom: 1px solid #777;
-            background-color: #fff;
+            background-color: #eee;
             top:           0;
             left:          0;
             right:         0;
@@ -102,6 +106,8 @@ namespace octdoc\format {
             padding:    5px 10px;
         }
         #toc ul {
+            padding-left: 0;
+            margin-left:  1.5em;
         }
         #refs {
             margin-top: 24px;
