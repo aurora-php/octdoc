@@ -253,9 +253,11 @@ namespace octdoc\format {
 
             foreach ($source as $section => $part) {
                 // section header
-                if (!isset($this->section[$section])) $section = '';
+                $section = (isset(\octdoc\def::$sections[$section])
+                            ? \octdoc\def::$sections[$section]
+                            : $section = ucfirst($section));
 
-                fputs($fp, sprintf("<h2>%s</h2>\n", \octdoc\def::$sections[$section]));
+                fputs($fp, sprintf("<h2>%s</h2>\n", $section));
 
                 foreach ($part as $type => $files) {
                     if (count($files) == 0) continue;
