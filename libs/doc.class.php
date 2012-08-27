@@ -91,7 +91,7 @@ namespace octdoc {
          * @var     array
          */
         protected $files = array(
-            '.+\.erl$', '.+\.php$', '.+\.js$', '.+\.css$', '^Makefile(|\..+)$'
+            '.+\.lua$', '.+\.erl$', '.+\.php$', '.+\.js$', '.+\.css$', '^Makefile(|\..+)$'
         );
         /**/
 
@@ -128,7 +128,7 @@ namespace octdoc {
          * @var     array
          */
         protected $strip_extensions = array(
-            '\.class\.php$', '\.php$', '\.js$', '\.css$', '\.erl$'
+            '\.class\.php$', '\.inc\.php$', '\.php$', '\.js$', '\.css$', '\.erl$', '\.lua$'
         );
         /**/
 
