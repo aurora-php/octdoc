@@ -291,7 +291,7 @@ namespace octdoc\format {
         public function page($file, $title, array $doc)
         /**/
         {
-            $file = 'doc/' . $file . '.html';
+            $file = 'doc/content/' . $file . '.html';
 
             if (!($fp = fopen('php://memory', 'w'))) {
                 \octdoc\stdlib::log("unable to open file '$file' for writing");
