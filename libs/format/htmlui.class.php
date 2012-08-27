@@ -212,11 +212,21 @@ HTML
             color:            #aa0000;
         }
         table {
-            border: 1px solid #ccc;
+            font-family:     Verdana, Arial, Helvetica, sans-serif;
+            font-size:       0.9em;
+            border:          1px solid #ccc;
+            border-collapse: collapse;
         }
         table th {
             text-align:       left;
             background-color: #ddd;
+        }
+        table td {
+            padding:        2px;
+            vertical-align: top;
+        }
+        table tbody tr td {
+            border-top:     1px solid #ddd;
         }
         #content {
             margin-right:     250px;
