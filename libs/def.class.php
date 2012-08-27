@@ -42,7 +42,7 @@ namespace octdoc {
             'c' => 'Class',
             'd' => 'Constant',
             'f' => 'Function',
-            'h' => 'Header',
+            'h' => 'Other',
             'i' => 'Interface',
             'l' => 'License',
             'm' => 'Method',
