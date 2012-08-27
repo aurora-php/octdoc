@@ -69,6 +69,12 @@ namespace octdoc {
                         'source' => array('^([^#]|$)', true),
                         'end'    => '^#\*\*'
                     ),
+            '%%**'  => array(
+                        'start'  => '^%%\*\*',
+                        'doc'    => '^%%',
+                        'source' => array('^([^%%]|$)', true),
+                        'end'    => '^%%\*\*'
+                    ),
             '%**'   => array(
                         'start'  => '^%\*\*',
                         'doc'    => '^%',
