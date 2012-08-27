@@ -250,6 +250,15 @@ namespace octdoc {
                                 if (preg_match('/^([a-z]):(.*)$/', $row, $match)) {
                                     $tmp['scope'] = $match[2];
                                     $tmp['type']  = $match[1];
+
+                                    if (!isset(\octdoc\def::$types[$tmp['type']])) {
+                                        \octdoc\stdlib::log(sprintf(
+                                            'unknown type \'%s\' in @octdoc in:',
+                                            $tmp['type']
+                                        ), $tmp);
+
+                                        continue;
+                                    }
                                 }
                                 break;
                             case 'param':
