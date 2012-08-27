@@ -42,6 +42,15 @@ namespace octdoc\format {
         /**/
 
         /**
+         * Title of current page.
+         *
+         * @octdoc  m:htmlui/$page_title
+         * @var     string
+         */
+        protected $page_title = '';
+        /**/
+
+        /**
          * Write header for index page.
          *
          * @octdoc  m:htmlui/indexHeader
@@ -320,7 +329,7 @@ HTML
             fputs($fh, <<<HTML
         </div>
         <div id="sidebar">
-            <strong>Navigation</strong>
+            <h1>$this->page_title</h1>
             <ul>
 HTML
             );
@@ -373,6 +382,22 @@ HTML
         /**/
         {
             parent::index('toc', $doc, $source);
+        }
+
+        /**
+         * Write documentation for a specified file.
+         *
+         * @octdoc  m:htmlui/page
+         * @param   string                          $file           File to write documentation into.
+         * @param   string                          $title          Page title.
+         * @param   array                           $doc            Documentation to write.
+         */
+        public function page($file, $title, array $doc)
+        /**/
+        {
+            $this->page_title = $title;
+
+            parent::page($file, $title, $doc);
         }
     }
 }
