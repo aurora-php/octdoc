@@ -74,6 +74,12 @@ namespace octdoc {
                         'doc'    => '^%',
                         'source' => array('^([^%]|$)', true),
                         'end'    => '^%\*\*'
+                    ),
+            '--**'  => array(
+                        'start'  => '^--\*\*',
+                        'doc'    => '^--',
+                        'source' => array('^([^-]{2}|$)', true),
+                        'end'    => '^--\*\*'
                     )
         );
         /**/
