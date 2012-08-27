@@ -452,7 +452,7 @@ namespace octdoc {
             // create organizational structure and output index
             $parts = $this->organize($parts);
 
-            $output->index('doc/index', array(), $parts);
+            $output->index('index', array(), $parts);
 
             $output->postprocess();
         }
