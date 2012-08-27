@@ -206,9 +206,10 @@ namespace octdoc\format {
                                 $path = ltrim($prefix . '/' . $v, '/');
 
                                 $refs[$path] = array(
-                                    'file' => $node['file'] . '.html',
-                                    'path' => $path,
-                                    'name' => $v
+                                    'file'   => 'content/' . $node['file'] . '.html',
+                                    'path'   => $path,
+                                    'name'   => $v,
+                                    'anchor' => preg_replace('/[^a-z0-9]/i', '-', $v)
                                 );
                             }
                         });
