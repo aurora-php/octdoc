@@ -51,6 +51,15 @@ namespace octdoc\format {
         /**/
 
         /**
+         * Target for index links.
+         *
+         * @octdoc  m:htmlraw/$index_target
+         * @var     string
+         */
+        protected $index_target = '';
+        /**/
+
+        /**
          * Output handler.
          *
          * @octdoc  p:htmlraw/$output
@@ -214,7 +223,14 @@ namespace octdoc\format {
                             }
                         });
 
-                        fputs($fp, sprintf('<li><a href="%s">%s</a>', basename($node['file']), htmlentities($node['name'])));
+                        fputs($fp, sprintf(
+                            '<li><a href="%s"%s>%s</a>',
+                            'content/' . basename($node['file']) . '.html',
+                            ($this->index_target != ''
+                                ? ' target="' . $this->index_target . '"'
+                                : ''),
+                            htmlentities($node['name'])
+                        ));
 
                         if (!is_string(key($tree))) fputs($fp, '</li>');
 
