@@ -144,7 +144,7 @@ namespace octdoc\format {
 
             function update() {
                 var phrase = document.getElementById('phrase');
-                var val    = phrase.value;
+                var val    = phrase.value.toLowerCase();
                 var show   = {};
 
                 if (val == '') {
@@ -300,7 +300,7 @@ HTML
             foreach ($this->references as $ref => $meta) {
                 $id = 'ref' . (++$i);
 
-                $data[$ref] = $id;
+                $data[strtolower($ref)] = $id;
 
                 fputs($fh, sprintf(
                     '<li id="%s" onclick="parent.content.location.href=\'%s\'">%s<br /><small>%s</small></li>',
