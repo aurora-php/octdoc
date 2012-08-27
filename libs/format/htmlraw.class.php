@@ -42,6 +42,15 @@ namespace octdoc\format {
         /**/
 
         /**
+         * References within a page.
+         *
+         * @octdoc  m:htmlraw/$page_references
+         * @var     array
+         */
+        protected $page_references = array();
+        /**/
+
+        /**
          * Output handler.
          *
          * @octdoc  p:htmlraw/$output
@@ -272,6 +281,8 @@ namespace octdoc\format {
                 return false;
             }
 
+            $this->page_references = array();
+
             $this->pageHeader($fp, sprintf('%s -- %s', $this->title, $title));
 
             $type  = '';
@@ -288,11 +299,16 @@ namespace octdoc\format {
                 }
 
                 if (($pos = strpos($part['scope'], '/')) !== false) {
+                    $anchor = preg_replace('/[^a-z0-9]/i', '-', $part['scope']);
+
                     fputs($fp, sprintf(
-                        "<h%1\$d>%2\$s</h%1\$d>\n",
+                        "<a name=\"%1\$s\"></a><h%2\$d>%3\$s</h%2\$d>\n",
+                        $anchor,
                         $depth,
                         substr($part['scope'], $pos + 1)
                     ));
+
+                    $this->page_references[$anchor] = substr($part['scope'], $pos + 1);
                 }
 
                 // write description
