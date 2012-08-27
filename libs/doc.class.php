@@ -308,6 +308,19 @@ namespace octdoc {
 
             fclose($fp);
 
+            // sort documentation
+            if ($return) {
+                $sort_types = array();
+                $sort_names = array();
+
+                foreach ($return as $_r) {
+                    $sort_types[] = \octdoc\def::$sort['types'][$_r['type']];
+                    $sort_names[] = $_r['scope'];
+                }
+
+                array_multisort($sort_types, SORT_ASC, SORT_NUMERIC, $sort_names, SORT_ASC, $return);
+            }
+
             return $return;
         }
 
@@ -416,6 +429,7 @@ namespace octdoc {
                         return $v['scope'];
                     }, $doc);
 
+                    // add as documentation part
                     $parts[] = array(
                         'scope' => $scope,
                         'file'  => $name,
@@ -424,10 +438,12 @@ namespace octdoc {
                         'refs'  => $refs
                     );
 
+                    // write page
                     $output->page($name, $title, $doc);
                 }
             }
 
+            // create organizational structure and output index
             $parts = $this->organize($parts);
 
             $output->index('doc/index', array(), $parts);
