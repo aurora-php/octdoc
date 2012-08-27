@@ -81,6 +81,9 @@ namespace octdoc\format {
             left:       0;
             right:      0;
             display:    block;
+            padding:    5px 10px;
+        }
+        #toc ul {
         }
         #refs {
             margin-top: 24px;
@@ -170,7 +173,7 @@ namespace octdoc\format {
     <body>
         <div id="form">
             <form>
-                <input id="phrase" type="text" autocomplete="off" />
+                <input id="phrase" type="text" autocomplete="off" value="" />
             </form>
         </div>
         <div id="toc">
@@ -188,11 +191,62 @@ HTML
         protected function pageHeader($fh, $title)
         /**/
         {
-            fputs($fh, "<html>\n");
-            fputs($fh, "<head>\n");
-            fputs($fh, sprintf("<title>%s</title>\n", $title));
-            fputs($fh, "</head>\n");
-            fputs($fh, "<body>\n");
+            fputs($fh, <<<HTML
+<html>
+    <head>
+        <title>${title}</title>
+        <style type="text/css">
+        body {
+            font-family:      Verdana, Arial, Helvetica, sans-serif;
+            font-size:        0.9em;
+            margin:           0;
+            padding:          0;
+            background-color: #eee;
+        }
+        pre {
+            border:           1px solid #ccc;
+            background-color: #ffeecc;
+            padding:          5px;
+        }
+        a {
+            color:            #aa0000;
+        }
+        table {
+            border: 1px solid #ccc;
+        }
+        table th {
+            text-align:       left;
+            background-color: #ddd;
+        }
+        #content {
+            margin-right:     250px;
+            border-right:     1px solid #ccc;
+            background-color: #fff;
+            min-height:       100%;
+            padding:          10px;
+        }
+        #content dt {
+            margin:         10px 0 5px 0;
+            border-bottom:  1px dotted #777;
+        }
+        #sidebar {
+            position: fixed;
+            top:      10px;
+            right:    10px;
+            width:    230px;
+        }
+        #sidebar ul {
+            list-style:   none;
+            margin-left:  0;
+            padding-left: 1em;
+            text-indent:  -1em;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+HTML
+            );
         }
 
         /**
@@ -244,8 +298,29 @@ HTML
         protected function pageFooter($fh)
         /**/
         {
-            fputs($fh, "</body>\n");
-            fputs($fh, "</html>\n");
+            fputs($fh, <<<HTML
+        </div>
+        <div id="sidebar">
+            <strong>Navigation</strong>
+            <ul>
+HTML
+            );
+
+            foreach ($this->page_references as $ref => $name) {
+                fputs($fh, sprintf(
+                    "<li>&#187; <a href=\"#%s\">%s</a></li>\n",
+                    $ref,
+                    $name
+                ));
+            }
+
+            fputs($fh, <<<HTML
+            </ul>
+        </div>
+    </body>
+</html>
+HTML
+            );
         }
 
         /**
