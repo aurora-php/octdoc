@@ -33,6 +33,15 @@ namespace octdoc\format {
     /**/
     {
         /**
+         * Target for index links.
+         *
+         * @octdoc  m:htmlui/$index_target
+         * @var     string
+         */
+        protected $index_target = 'content';
+        /**/
+
+        /**
          * Write header for index page.
          *
          * @octdoc  m:htmlui/indexHeader
