@@ -35,7 +35,7 @@ namespace octdoc\output {
         /**
          * File handle.
          *
-         * @octdoc      v:tar/$fh
+         * @octdoc      p:tar/$fh
          * @var         resource
          */
         protected $fh = null;
@@ -44,7 +44,7 @@ namespace octdoc\output {
         /**
          * Directories already created in tar.
          *
-         * @octdoc      v:tar/$directories
+         * @octdoc      p:tar/$directories
          * @var         array
          */
         protected $directories = array();
@@ -53,7 +53,7 @@ namespace octdoc\output {
         /**
          * User information.
          *
-         * @octdoc      v:tar/$info
+         * @octdoc      p:tar/$info
          * @var         array
          */
         protected $info = array();

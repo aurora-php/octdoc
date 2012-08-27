@@ -35,7 +35,7 @@ namespace octdoc {
         /**
          * Opened pipes.
          *
-         * @octdoc  v:pipe/$pipes
+         * @octdoc  p:pipe/$pipes
          * @var     array
          */
         protected $pipes = array();
@@ -44,7 +44,7 @@ namespace octdoc {
         /**
          * Process resource handler.
          *
-         * @octdoc  v:pipe/$process
+         * @octdoc  p:pipe/$process
          * @var     resource
          */
         protected $process = null;
