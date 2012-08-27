@@ -290,7 +290,7 @@ HTML
                 fputs($fh, sprintf(
                     '<li id="%s" onclick="parent.content.location.href=\'%s\'">%s<br /><small>%s</small></li>',
                     $id,
-                    $meta['file'],
+                    $meta['file'] . '#' . $meta['anchor'],
                     $meta['name'],
                     $meta['path']
                 ));
