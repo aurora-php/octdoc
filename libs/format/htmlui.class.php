@@ -107,7 +107,7 @@ namespace octdoc\format {
         }
         #toc ul {
             padding-left: 0;
-            margin-left:  1.5em;
+            margin-left:  1.2em;
         }
         #refs {
             margin-top: 24px;
@@ -367,7 +367,10 @@ HTML
         {
             $this->output->addFile('doc/index.html', <<<HTML
 <html>
-    <frameset cols="200,*">
+    <head>
+        <title>$this->title</title>
+    </head>
+    <frameset name="octdocframe" cols="250,*" onload="fixFrames()">
         <frame name="toc" src="toc.html" />
         <frame name="content" src="" />
     </frameset>
