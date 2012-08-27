@@ -275,6 +275,16 @@ HTML
             padding-left: 1em;
             text-indent:  -1em;
         }
+
+        @media print {
+            #sidebar {
+                display: none;
+            }
+            #content {
+                margin-right: 0;
+                border-right: 0;
+            }
+        }
         </style>
     </head>
     <body>
@@ -336,9 +346,14 @@ HTML
         </div>
         <div id="sidebar">
             <h1>$this->page_title</h1>
+
+            [<a href="javascript://" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">top</a>]&nbsp;[<a href="javascript://" onclick="window.print();">print</a>]
+
             <ul>
 HTML
             );
+
+            array_shift($this->page_references);
 
             foreach ($this->page_references as $ref => $name) {
                 fputs($fh, sprintf(
