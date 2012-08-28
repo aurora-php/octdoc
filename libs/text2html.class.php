@@ -302,7 +302,8 @@ namespace octdoc {
 
                     // eat line
                     $line = '';
-                } elseif ($state == 0 && preg_match('/^(\*|\+|-|#) {' . ($this->tab_width - 1) . '}/', $line, $match)) {
+                // } elseif ($state == 0 && preg_match('/^(\*|\+|-|#) {' . ($this->tab_width - 1) . '}/', $line, $match)) {
+                } elseif ($state == 0 && preg_match('/^(\*|\+|-|#) {1,' . ($this->tab_width - 1) . '}/', $line, $match)) {
                     if ($buffer_cnt() > 0) {
                         $eat = true;
                         continue;
