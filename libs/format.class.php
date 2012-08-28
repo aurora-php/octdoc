@@ -33,6 +33,15 @@ namespace octdoc {
     /**/
     {
         /**
+         * Supported formats.
+         *
+         * @octdoc  p:format/$formats
+         * @var     array
+         */
+        protected static $formats = array();
+        /**/
+
+        /**
          * Documentation title.
          *
          * @octdoc  p:format/$title
@@ -60,15 +69,20 @@ namespace octdoc {
         public static function getTypes()
         /**/
         {
-            $types = array();
+            if (count(self::$formats) == 0) {
+                foreach (new \DirectoryIterator(__DIR__ . '/format/') as $file) {
+                    if ($file->isFile() && preg_match('/\.class\.php$/', $name = $file->getFilename())) {
+                        $type  = basename($name, '.class.php');
+                        $class = '\\octdoc\\format\\' . $type;
 
-            foreach (new \DirectoryIterator(__DIR__ . '/format/') as $file) {
-                if ($file->isFile() && preg_match('/\.class\.php$/', $name = $file->getFilename())) {
-                    $types[] = basename($name, '.class.php');
+                        if ($class::test()) {
+                            self::$formats[] = basename($name, '.class.php');
+                        }
+                    }
                 }
             }
 
-            return $types;
+            return self::$formats;
         }
 
         /**
@@ -82,12 +96,14 @@ namespace octdoc {
         public static function getInstance($type, \octdoc\output $output)
         /**/
         {
+            if (!in_array($type, self::$formats)) {
+                \octdoc\stdlib::log(sprintf("unsupported format '%s'", $type));
+
+                die(1);
+            }
+
             $file  = $type . '.class.php';
             $class = '\\octdoc\\format\\' . $type;
-
-            if (!file_exists(__DIR__ . '/format/' . $file)) {
-                die(sprintf("unable to load format handler '%'\n", $type));
-            }
 
             return new $class($output);
         }
@@ -111,6 +127,15 @@ namespace octdoc {
         /**/
         {
         }
+
+        /**
+         * Test for possible requirements to support format.
+         *
+         * @octdoc  m:format/test
+         * @return  bool                                            Returns true, if format can be supported.
+         */
+        abstract public static function test();
+        /**/
 
         /**
          * Write documentation index to temporary directory.
