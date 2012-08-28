@@ -54,8 +54,12 @@ namespace octdoc {
         {
             global $argv;
 
-            $formats = \octdoc\format::getTypes();
-            $targets = \octdoc\output::getTypes();
+            $formats  = \octdoc\format::getTypes();
+            $targets  = \octdoc\output::getTypes();
+            $services = \octdoc\service::getServices();
+
+            // find pandoc
+            $pandoc = trim(`which pandoc`);
 
             // parse command-line arguments
             $missing = array();
@@ -79,6 +83,9 @@ namespace octdoc {
                 print "    " . implode("\n    ", $formats) . "\n\n";
                 print "targets\n\n";
                 print "    " . implode("\n    ", $targets) . "\n\n";
+                print "supported services\n\n";
+                print "    " . implode("\n    ", $services) . "\n\n";
+
                 die(0);
             }
 
