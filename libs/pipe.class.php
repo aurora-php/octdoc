@@ -25,7 +25,7 @@ namespace octdoc {
     /**
      * Execute a command using pipes.
      *
-     * @octdoc      c:libs/pipe
+     * @octdoc      c:octdoc/pipe
      * @copyright   copyright (c) 2011 by Harald Lapp
      * @author      Harald Lapp <harald@octris.org>
      */
