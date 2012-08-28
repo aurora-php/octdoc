@@ -91,6 +91,18 @@ namespace octdoc\format {
         }
 
         /**
+         * Test for possible requirements to support format.
+         *
+         * @octdoc  m:htmlraw/test
+         * @return  bool                                            Returns true, if format can be supported.
+         */
+        public static function test()
+        /**/
+        {
+            return true;
+        }
+
+        /**
          * Write header for index page.
          *
          * @octdoc  m:htmlraw/indexHeader
