@@ -223,16 +223,15 @@ namespace octdoc\format {
 
                     if (is_int($key)) {
                         array_walk($node['refs'], function($v) use (&$refs, $prefix, $node) {
-                            if ($v != $node['name']) {
-                                $path = ltrim($prefix . '/' . $v, '/');
+                            $path = ltrim($prefix . '/' . $v, '/');
 
-                                $refs[$path] = array(
-                                    'file'   => 'content/' . $node['file'] . '.html',
-                                    'path'   => $path,
-                                    'name'   => $v,
-                                    'anchor' => preg_replace('/[^a-z0-9]/i', '-', $v)
-                                );
-                            }
+                            $refs[$path] = array(
+                                'file'   => 'content/' . $node['file'] . '.html',
+                                'path'   => $path,
+                                'name'   => $v,
+                                'page'   => ($v == $node['name']),
+                                'anchor' => preg_replace('/[^a-z0-9]/i', '-', $v)
+                            );
                         });
 
                         fputs($fp, sprintf(
