@@ -418,10 +418,12 @@ namespace octdoc\format {
                         $dd .= "<th>Type</th><th>Description</th>\n";
                         $dd .= "</tr></thead><tbody>\n";
 
-                        $dd .= sprintf(
-                            "<tr><td>%s</td><td>%s</td></tr>\n",
-                            $attr['type'], $attr['text']
-                        );
+                        foreach ($attr as $r) {
+                            $dd .= sprintf(
+                                "<tr><td>%s</td><td>%s</td></tr>\n",
+                                $r['type'], $r['text']
+                            );
+                        }
 
                         $dd .= "</tbody></table>\n";
                         break;
