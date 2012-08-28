@@ -127,6 +127,9 @@ namespace octdoc\format {
             background-color: #e6ffcc;
             cursor:           pointer;
         }
+        #refs li.page {
+            background-color: #cce6ff;
+        }
         #refs li:hover {
             background-color: #ddd;
         }
@@ -313,9 +316,10 @@ HTML
                 $data[strtolower($ref)] = $id;
 
                 fputs($fh, sprintf(
-                    '<li id="%s" onclick="parent.content.location.href=\'%s\'">%s<br /><small>%s</small></li>',
+                    '<li id="%s" onclick="parent.content.location.href=\'%s\'"%s>%s<br /><small>%s</small></li>',
                     $id,
                     $meta['file'] . '#' . $meta['anchor'],
+                    ($meta['page'] ? ' class="page"' : ''),
                     $meta['name'],
                     $meta['path']
                 ));
