@@ -300,6 +300,11 @@ namespace octdoc\format {
                 return false;
             }
 
+            $text2html = $this->text2html;
+            $convert   = \octdoc\service::getCallback('pandoc', function(array $args) use ($text2html) {
+                return $this->text2html->process($args['text']);
+            });
+
             $this->page_references = array();
 
             $this->pageHeader($fp, sprintf('%s -- %s', $this->title, $title));
@@ -332,7 +337,11 @@ namespace octdoc\format {
 
                 // write description
                 if (trim($part['text']) != '') {
-                    fputs($fp, $this->text2html->process($part['text']));
+                    fputs($fp, $convert(array(
+                        'from' => 'markdown',
+                        'to'   => 'html',
+                        'text' => $part['text']
+                    )));
                 }
 
                 // write included source code
