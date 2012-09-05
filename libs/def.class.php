@@ -103,6 +103,8 @@ namespace octdoc {
             ),
             'attributes' => array(
                 'package',
+                'title',
+                'version',
                 'license',
                 'copyright',
                 'author',
@@ -110,12 +112,16 @@ namespace octdoc {
                 'deprecated',
                 'since',
                 'see',
+                'reference',
+                'doc',
                 'tutorial',
                 'example',
                 'abstract',
                 'static',
+                'spec',
                 'param',
                 'return',
+                'throws',
                 'todo'
             ),
             'sections' => array(
