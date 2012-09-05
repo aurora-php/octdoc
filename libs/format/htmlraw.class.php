@@ -168,7 +168,7 @@ namespace octdoc\format {
         public function index($file, array $doc, array $source)
         /**/
         {
-            $file = 'doc/' . $file . '.html';
+            $file = $file . '.html';
 
             if (!($fp = fopen('php://memory', 'w'))) {
                 \octdoc\stdlib::log("unable to open file '$file' for writing");
@@ -223,16 +223,15 @@ namespace octdoc\format {
 
                     if (is_int($key)) {
                         array_walk($node['refs'], function($v) use (&$refs, $prefix, $node) {
-                            if ($v != $node['name']) {
-                                $path = ltrim($prefix . '/' . $v, '/');
+                            $path = ltrim($prefix . '/' . $v, '/');
 
-                                $refs[$path] = array(
-                                    'file'   => 'content/' . $node['file'] . '.html',
-                                    'path'   => $path,
-                                    'name'   => $v,
-                                    'anchor' => preg_replace('/[^a-z0-9]/i', '-', $v)
-                                );
-                            }
+                            $refs[$path] = array(
+                                'file'   => 'content/' . $node['file'] . '.html',
+                                'path'   => $path,
+                                'name'   => $v,
+                                'page'   => ($v == $node['name']),
+                                'anchor' => preg_replace('/[^a-z0-9]/i', '-', $v)
+                            );
                         });
 
                         fputs($fp, sprintf(
@@ -305,7 +304,7 @@ namespace octdoc\format {
         public function page($file, $title, array $doc)
         /**/
         {
-            $file = 'doc/content/' . $file . '.html';
+            $file = 'content/' . $file . '.html';
 
             if (!($fp = fopen('php://memory', 'w'))) {
                 \octdoc\stdlib::log("unable to open file '$file' for writing");
@@ -427,10 +426,12 @@ namespace octdoc\format {
                         $dd .= "<th>Type</th><th>Description</th>\n";
                         $dd .= "</tr></thead><tbody>\n";
 
-                        $dd .= sprintf(
-                            "<tr><td>%s</td><td>%s</td></tr>\n",
-                            $attr['type'], $attr['text']
-                        );
+                        foreach ($attr as $r) {
+                            $dd .= sprintf(
+                                "<tr><td>%s</td><td>%s</td></tr>\n",
+                                $r['type'], $r['text']
+                            );
+                        }
 
                         $dd .= "</tbody></table>\n";
                         break;

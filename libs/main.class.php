@@ -64,13 +64,14 @@ namespace octdoc {
             // parse command-line arguments
             $missing = array();
             $options = stdlib::getOptions(array(
-                'i' => stdlib::T_OPT_REQUIRED,
-                'f' => stdlib::T_OPT_OPTIONAL,
-                't' => stdlib::T_OPT_OPTIONAL,
-                'h' => stdlib::T_OPT_OPTIONAL
+                'i'    => stdlib::T_OPT_REQUIRED,
+                'f'    => stdlib::T_OPT_OPTIONAL,
+                't'    => stdlib::T_OPT_OPTIONAL,
+                'h'    => stdlib::T_OPT_OPTIONAL,
+                'help' => stdlib::T_OPT_OPTIONAL
             ), $missing);
 
-            if (isset($options['h'])) {
+            if (isset($options['h']) || isset($options['help'])) {
                 print "octris documentation extractor\n";
                 print "copyright (c) 2012 by Harald Lapp <harald@octris.org>\n\n";
                 printf("usage: %s -h\n", $argv[0]);
@@ -96,10 +97,12 @@ namespace octdoc {
             }
 
             // input directory
-            if (!is_dir($options['i'])) {
+            $inp = realpath($options['i']);
+
+            if ($inp === false || !is_dir($inp)) {
                 die("no directory specified\n");
             } else {
-                $inp = $options['i'];
+                \octdoc\registry::setValue('source', $inp);
             }
 
             // output format

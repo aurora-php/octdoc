@@ -203,7 +203,7 @@ namespace octdoc {
                     'source'     => '',
                     'text'       => '',
                     'type'       => '',
-                    'attributes' => array('param' => array())
+                    'attributes' => array('param' => array(), 'return' => array())
                 );
             };
 
@@ -299,10 +299,14 @@ namespace octdoc {
                                     continue;
                                 }
 
-                                $tmp['attributes']['return'] = array(
+                                $idx = count($tmp['attributes']['return']);
+
+                                $tmp['attributes']['return'][$idx] = array(
                                     'type' => $_type,
                                     'text' => $_text
                                 );
+
+                                $attrib =& $tmp['attributes']['return'][$idx]['text'];
                                 break;
                             default:
                                 $tmp['attributes'][$match[1]] = $row . "\n";

@@ -42,6 +42,15 @@ namespace octdoc\output {
         /**/
 
         /**
+         * Root directory for generated tar.
+         *
+         * @octdoc      p:tar/$root
+         * @var         string
+         */
+        protected $root = '';
+        /**/
+
+        /**
          * Directories already created in tar.
          *
          * @octdoc      p:tar/$directories
@@ -81,6 +90,15 @@ namespace octdoc\output {
                 'user_name'  => $user_info['name'],
                 'group_name' => $group_info['name']
             );
+
+            // define root directory in tar
+            if (!($root = basename(\octdoc\registry::getValue('source')))) {
+                list($msec, $sec) = explode(' ', microtime());
+
+                $root = sprintf('%8x%05x', $sec, $msec * 1000000);
+            }
+
+            $this->root = $root . '-octdoc';
         }
 
         /**
@@ -142,6 +160,36 @@ namespace octdoc\output {
         }
 
         /**
+         * Create a directory in tar archive including root-part if it does not exist and return it's name.
+         *
+         * @octdoc      m:tar/createDirectory
+         * @param       string          $dirname                Directory name.
+         * @return      string                                  Created directory.
+         */
+        protected function createDirectory($dirname)
+        /**/
+        {
+            $dirname = trim($dirname, '/');
+            $dirname = $this->root . ($dirname == '.' ? '' : '/' . $dirname);
+
+            if ($dirname != '' && array_search($dirname, $this->directories) === false) {
+                $tmp = explode('/', $dirname);
+
+                for ($i = 0, $cnt = count($tmp); $i < $cnt; ++$i) {
+                    $dir = implode('/', array_slice($tmp, 0, $i + 1)) . '/';
+
+                    if (array_search($dir, $this->directories) === false) {
+                        $this->writeHeader($dir);
+
+                        $this->directories[] = $dir;
+                    }
+                }
+            }
+
+            return $dirname;
+        }
+
+        /**
          * Add file to output.
          *
          * @octdoc      m:tar/addFile
@@ -151,11 +199,7 @@ namespace octdoc\output {
         public function addFile($filename, $data)
         /**/
         {
-            $dir = ltrim(dirname($filename), '/');
-
-            if ($dir != '' && array_search($dir, $this->directories) === false) {
-                $this->addDirectory($dir);
-            }
+            $filename = $this->createDirectory(dirname($filename)) . '/' . basename($filename);
 
             $this->writeHeader($filename, $len = strlen($data));
 
@@ -171,17 +215,7 @@ namespace octdoc\output {
         public function addDirectory($directory)
         /**/
         {
-            $tmp = explode('/', trim($directory, '/'));
-
-            for ($i = 0, $cnt = count($tmp); $i < $cnt; ++$i) {
-                $dir = implode('/', array_slice($tmp, 0, $i + 1)) . '/';
-
-                if (array_search($dir, $this->directories) === false) {
-                    $this->writeHeader($dir);
-
-                    $this->directories[] = $dir;
-                }
-            }
+            $this->createDirectory($directory);
         }
     }
 }

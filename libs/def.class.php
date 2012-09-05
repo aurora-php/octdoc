@@ -53,7 +53,7 @@ namespace octdoc {
         /**/
 
         /**
-         * Docblock attributes.
+         * Docblock attributes. This defines all supported docblocks
          *
          * @octdoc  p:def/$attributes
          * @var     array
@@ -63,6 +63,8 @@ namespace octdoc {
             'copyright' => 'Copyright',
             'license'   => 'License',
             'package'   => 'Package',
+            'param'     => 'Parameters',
+            'return'    => 'Return values',
 
         );
         /**/
@@ -103,6 +105,8 @@ namespace octdoc {
             ),
             'attributes' => array(
                 'package',
+                'title',
+                'version',
                 'license',
                 'copyright',
                 'author',
@@ -110,12 +114,16 @@ namespace octdoc {
                 'deprecated',
                 'since',
                 'see',
+                'reference',
+                'doc',
                 'tutorial',
                 'example',
                 'abstract',
                 'static',
+                'spec',
                 'param',
                 'return',
+                'throws',
                 'todo'
             ),
             'sections' => array(
