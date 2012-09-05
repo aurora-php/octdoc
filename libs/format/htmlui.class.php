@@ -396,6 +396,10 @@ HTML
 </html>
 HTML
             );
+
+            $this->output->addFile('meta.json', json_encode(array(
+                'title' => $this->title
+            )));
         }
 
         /**
