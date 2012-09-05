@@ -168,7 +168,7 @@ namespace octdoc\format {
         public function index($file, array $doc, array $source)
         /**/
         {
-            $file = 'doc/' . $file . '.html';
+            $file = $file . '.html';
 
             if (!($fp = fopen('php://memory', 'w'))) {
                 \octdoc\stdlib::log("unable to open file '$file' for writing");
@@ -304,7 +304,7 @@ namespace octdoc\format {
         public function page($file, $title, array $doc)
         /**/
         {
-            $file = 'doc/content/' . $file . '.html';
+            $file = 'content/' . $file . '.html';
 
             if (!($fp = fopen('php://memory', 'w'))) {
                 \octdoc\stdlib::log("unable to open file '$file' for writing");

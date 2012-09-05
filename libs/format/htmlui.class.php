@@ -384,7 +384,7 @@ HTML
         public function postprocess()
         /**/
         {
-            $this->output->addFile('doc/index.html', <<<HTML
+            $this->output->addFile('index.html', <<<HTML
 <html>
     <head>
         <title>$this->title</title>
