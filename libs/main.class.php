@@ -90,10 +90,12 @@ namespace octdoc {
             }
 
             // input directory
-            if (!is_dir($options['i'])) {
+            $inp = realpath($options['i']);
+
+            if ($inp === false || !is_dir($inp)) {
                 die("no directory specified\n");
             } else {
-                $inp = $options['i'];
+                \octdoc\registry::setValue('source', $inp);
             }
 
             // output format
