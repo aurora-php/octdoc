@@ -33,12 +33,12 @@ namespace octdoc {
     /**/
     {
         /**
-         * Supported formats.
+         * Stores a map of the supported formats and the class implementing a format.
          *
          * @octdoc  p:format/$formats
          * @var     array
          */
-        protected static $formats = array();
+        private static $formats = array();
         /**/
 
         /**
@@ -75,37 +75,49 @@ namespace octdoc {
                         $type  = basename($name, '.class.php');
                         $class = '\\octdoc\\format\\' . $type;
 
-                        if ($class::test()) {
-                            self::$formats[] = basename($name, '.class.php');
+                        foreach ($class::getFormats() as $format) {
+                            self::$formats[$format] = $type;
                         }
                     }
                 }
             }
 
-            return self::$formats;
+            return array_keys(self::$formats);
         }
 
         /**
          * Return new instance of a specified format handler.
          *
          * @octdoc  m:format/getInstance
-         * @param   string              $type                   Name of format handler.
+         * @param   string              $format                 Name of format to return instance of handler for.
          * @param   \octdoc\output      $output                 Output handler to use.
          * @return  \octdoc\format                              Instance of format handler.
          */
-        public static function getInstance($type, \octdoc\output $output)
+        public static function getInstance($format, \octdoc\output $output)
         /**/
         {
-            if (!in_array($type, self::$formats)) {
-                \octdoc\stdlib::log(sprintf("unsupported format '%s'", $type));
+            if (!isset(self::$formats[$format])) {
+                \octdoc\stdlib::log(sprintf("unsupported format '%s'", $format));
 
                 die(1);
             }
 
-            $file  = $type . '.class.php';
-            $class = '\\octdoc\\format\\' . $type;
+            $file  = self::$formats[$format] . '.class.php';
+            $class = '\\octdoc\\format\\' . self::$formats[$format];
 
             return new $class($output);
+        }
+
+        /**
+         * Return the formats that are supported by the implemnenting class.
+         *
+         * @octdoc  m:format/getFormats
+         * @return  array                           Array with strings of the formats.
+         */
+        public static function getFormats()
+        /**/
+        {
+            return array();
         }
 
         /**
@@ -127,15 +139,6 @@ namespace octdoc {
         /**/
         {
         }
-
-        /**
-         * Test for possible requirements to support format.
-         *
-         * @octdoc  m:format/test
-         * @return  bool                                            Returns true, if format can be supported.
-         */
-        abstract public static function test();
-        /**/
 
         /**
          * Write documentation index to temporary directory.
