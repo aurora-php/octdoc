@@ -409,11 +409,6 @@ namespace octdoc\format {
                     $dd = '';
 
                     switch ($name) {
-                    case 'author':
-                        foreach ($attr as $r) {
-                            $dd .= $this->textproc->process($r['text']) . '<br />';
-                        }
-                        break;
                     case 'deprecated':
                         $dd .= "Yes";
                         break;
@@ -447,7 +442,13 @@ namespace octdoc\format {
                         $dd .= "</tbody></table>\n";
                         break;
                     default:
-                        $dd = $this->textproc->process($attr);
+                        if (is_array($attr)) {
+                            foreach ($attr as $r) {
+                                $dd .= $this->textproc->process($r['text']) . '<br />';
+                            }
+                        } else {
+                            $dd = $this->textproc->process($attr);
+                        }
                         break;
                     }
 
