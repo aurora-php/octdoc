@@ -203,7 +203,12 @@ namespace octdoc {
                     'source'     => '',
                     'text'       => '',
                     'type'       => '',
-                    'attributes' => array('param' => array(), 'return' => array())
+                    'attributes' => array(
+                        'author' => array(),
+                        'param'  => array(),
+                        'return' => array(),
+                        'throws' => array()
+                    )
                 );
             };
 
@@ -273,6 +278,13 @@ namespace octdoc {
                                     }
                                 }
                                 break;
+                            case 'author':
+                                $idx = count($tmp['attributes']['author']);
+
+                                $tmp['attributes']['author'][$idx] = array('text' => $row);
+
+                                $attrib =& $tmp['attributes']['author'][$idx]['text'];
+                                break;
                             case 'param':
                                 try {
                                     list($_type, $_name, $_text) = preg_split('/ +/', $row, 3);
@@ -307,6 +319,23 @@ namespace octdoc {
                                 );
 
                                 $attrib =& $tmp['attributes']['return'][$idx]['text'];
+                                break;
+                            case 'throws':
+                                try {
+                                    list($_type, $_text) = preg_split('/ +/', $row, 2);
+                                } catch(\Exception $e) {
+                                    \octdoc\stdlib::log('unable to parse @throws in:', $tmp);
+                                    continue;
+                                }
+
+                                $idx = count($tmp['attributes']['throws']);
+
+                                $tmp['attributes']['throws'][$idx] = array(
+                                    'type' => $_type,
+                                    'text' => $_text
+                                );
+
+                                $attrib =& $tmp['attributes']['throws'][$idx]['text'];
                                 break;
                             default:
                                 $tmp['attributes'][$match[1]] = $row . "\n";

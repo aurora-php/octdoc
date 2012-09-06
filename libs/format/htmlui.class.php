@@ -389,7 +389,7 @@ HTML
     <head>
         <title>$this->title</title>
     </head>
-    <frameset name="octdocframe" cols="250,*" onload="fixFrames()">
+    <frameset cols="250,*">
         <frame name="toc" src="toc.html" />
         <frame name="content" src="" />
     </frameset>

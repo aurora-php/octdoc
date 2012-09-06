@@ -69,12 +69,12 @@ namespace octdoc\format {
         /**/
 
         /**
-         * Instance of text to html converter.
+         * Instance of text processor.
          *
-         * @octdoc  p:htmlraw/$text2html
-         * @var     \octdoc\text2html
+         * @octdoc  p:htmlraw/$textproc
+         * @var     \octdoc\textproc
          */
-        protected $text2html;
+        protected $textproc;
         /**/
 
         /**
@@ -86,8 +86,22 @@ namespace octdoc\format {
         public function __construct(\octdoc\output $output)
         /**/
         {
-            $this->output    = $output;
-            $this->text2html = new \octdoc\text2html();
+            $this->output   = $output;
+            $this->textproc = new \octdoc\textproc();
+            $this->textproc->setEventHandler(function($evt, $text) {
+                switch ($evt) {
+                case 'p-start':
+                    return '<p>';
+                case 'p-end':
+                    return '</p>';
+                case 'mailto':
+                    return sprintf('&lt;<a href="mailto:%s">%s</a>&gt;', $text, $text);
+                case 'uri':
+                    return sprintf('<a target="_blank" href="%s">%s</a>', $text);
+                default:
+                    return $text;
+                }
+            });
         }
 
         /**
@@ -311,11 +325,6 @@ namespace octdoc\format {
                 return false;
             }
 
-            $text2html = $this->text2html;
-            $convert   = \octdoc\service::getCallback('pandoc', function(array $args) use ($text2html) {
-                return $this->text2html->process($args['text']);
-            });
-
             $this->page_references = array();
 
             $this->pageHeader($fp, sprintf('%s -- %s', $this->title, $title));
@@ -348,11 +357,7 @@ namespace octdoc\format {
 
                 // write description
                 if (trim($part['text']) != '') {
-                    fputs($fp, $convert(array(
-                        'from' => 'markdown',
-                        'to'   => 'html',
-                        'text' => $part['text']
-                    )));
+                    fputs($fp, $this->textproc->process($part['text']));
                 }
 
                 // write included source code
@@ -415,13 +420,14 @@ namespace octdoc\format {
                         foreach ($attr as $r) {
                             $dd .= sprintf(
                                 "<tr><td>%s</td><td>%s</td><td>%s</td></tr>\n",
-                                $r['name'], $r['type'], $r['text']
+                                $r['name'], $r['type'], $this->textproc->process($r['text'])
                             );
                         }
 
                         $dd .= "</tbody></table>\n";
                         break;
                     case 'return':
+                    case 'throws':
                         $dd .= "<table width=\"100%\"><thead><tr>\n";
                         $dd .= "<th>Type</th><th>Description</th>\n";
                         $dd .= "</tr></thead><tbody>\n";
@@ -429,14 +435,20 @@ namespace octdoc\format {
                         foreach ($attr as $r) {
                             $dd .= sprintf(
                                 "<tr><td>%s</td><td>%s</td></tr>\n",
-                                $r['type'], $r['text']
+                                $r['type'], $this->textproc->process($r['text'])
                             );
                         }
 
                         $dd .= "</tbody></table>\n";
                         break;
                     default:
-                        $dd = $attr;
+                        if (is_array($attr)) {
+                            foreach ($attr as $r) {
+                                $dd .= $this->textproc->process($r['text']) . '<br />';
+                            }
+                        } else {
+                            $dd = $this->textproc->process($attr);
+                        }
                         break;
                     }
 
