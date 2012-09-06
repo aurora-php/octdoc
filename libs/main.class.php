@@ -64,18 +64,20 @@ namespace octdoc {
                 'f'    => stdlib::T_OPT_OPTIONAL,
                 't'    => stdlib::T_OPT_OPTIONAL,
                 'h'    => stdlib::T_OPT_OPTIONAL,
-                'help' => stdlib::T_OPT_OPTIONAL
+                'help' => stdlib::T_OPT_OPTIONAL,
+                'p'    => stdlib::T_OPT_OPTIONAL | stdlib::T_OPT_NTIMES
             ), $missing);
 
             if (isset($options['h']) || isset($options['help'])) {
                 print "octris documentation extractor\n";
                 print "copyright (c) 2012 by Harald Lapp <harald@octris.org>\n\n";
                 printf("usage: %s -h\n", $argv[0]);
-                printf("usage: %s -i input-directory [-f output-format] [-t output-target]\n\n", $argv[0]);
+                printf("usage: %s -i input-directory [-f output-format] [-t output-target] [-p name=value ...]\n\n", $argv[0]);
                 print "options\n\n";
                 print "    -i input-directory\n";
                 print "    -f output-format\n";
-                print "    -t output-target\n\n";
+                print "    -t output-target\n";
+                print "    -p property=value pairs\n\n";
                 print "formats\n\n";
                 print "    " . implode("\n    ", $formats) . "\n\n";
                 print "targets\n\n";
@@ -120,6 +122,34 @@ namespace octdoc {
                 $out = 'tar';
             }
 
+            // property/value pairs
+            $props = array();
+            $tmp  = (isset($options['p'])
+                        ? (!is_array($options['p'])
+                            ? array($options['p'])
+                            : $options['p'])
+                        : array());
+
+            array_walk($tmp, function(&$v) use (&$props) {
+                if (preg_match('/^(?P<name>[a-z_0-9]+)(=(?P<value>.+)|)$/', $v, $m)) {
+                    $val = (isset($m['value'])
+                            ? $m['value']
+                            : true);
+
+                    $props[$m['name']] = (isset($m['value'])
+                                          ? $m['value']
+                                          : true);
+                }
+            });
+
+            $props = array_merge($props, array(
+                '_NOW_'  => strftime('%Y-%m-%d %H:%M:%S'),
+                '_DATE_' => strftime('%d/%m/%Y')
+            ));
+
+            \octdoc\registry::setValue('props', $props);
+
+            // execute documentation tool
             $doc = new \octdoc\doc();
             $doc->setFormat($fmt);
             $doc->setOutput($out);
