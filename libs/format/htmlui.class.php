@@ -51,6 +51,30 @@ namespace octdoc\format {
         /**/
 
         /**
+         * Constructor.
+         *
+         * @octdoc  m:htmlui/__construct
+         * @param   \octdoc\output          $output                 Output handler to use.
+         */
+        public function __construct(\octdoc\output $output)
+        /**/
+        {
+            parent::__construct($output);
+        }
+
+        /**
+         * Return the formats that are supported by the implemnenting class.
+         *
+         * @octdoc  m:htmlui/getFormats
+         * @return  array                           Array with strings of the formats.
+         */
+        public static function getFormats()
+        /**/
+        {
+            return array('htmlui');
+        }
+
+        /**
          * Write header for index page.
          *
          * @octdoc  m:htmlui/indexHeader

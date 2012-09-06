@@ -105,15 +105,15 @@ namespace octdoc\format {
         }
 
         /**
-         * Test for possible requirements to support format.
+         * Return the formats that are supported by the implemnenting class.
          *
-         * @octdoc  m:htmlraw/test
-         * @return  bool                                            Returns true, if format can be supported.
+         * @octdoc  m:htmlraw/getFormats
+         * @return  array                           Array with strings of the formats.
          */
-        public static function test()
+        public static function getFormats()
         /**/
         {
-            return true;
+            return array('htmlraw');
         }
 
         /**
