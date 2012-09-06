@@ -411,7 +411,7 @@ namespace octdoc\format {
                     switch ($name) {
                     case 'author':
                         foreach ($attr as $r) {
-                            $dd .= $this->textproc->process($r['text']);
+                            $dd .= $this->textproc->process($r['text']) . '<br />';
                         }
                         break;
                     case 'deprecated':
