@@ -39,6 +39,7 @@ namespace octdoc {
          * @var     array
          */
         public static $types = array(
+            'a' => 'Abstract',
             'c' => 'Class',
             'd' => 'Constant',
             'f' => 'Function',
@@ -101,7 +102,7 @@ namespace octdoc {
                 'c' => 4, 'i' => 4, 't' => 4,
                 'd' => 5,
                 'p' => 6,
-                'm' => 7
+                'm' => 7, 'a' => 7
             ),
             'attributes' => array(
                 'package',
@@ -145,7 +146,7 @@ namespace octdoc {
             'h' => 1,
             'v' => 1, 'f' => 1,
             'c' => 1, 'i' => 1, 't' => 1,
-            'd' => 3, 'p' => 3, 'm' => 3,
+            'd' => 3, 'p' => 3, 'm' => 3, 'a' => 3
 
             'scope' => 5
         );
