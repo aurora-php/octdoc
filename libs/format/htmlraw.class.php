@@ -86,6 +86,8 @@ namespace octdoc\format {
         public function __construct(\octdoc\output $output)
         /**/
         {
+            parent::__construct();
+
             $this->output   = $output;
             $this->textproc = new \octdoc\textproc();
             $this->textproc->setEventHandler(function($evt, $text) {
