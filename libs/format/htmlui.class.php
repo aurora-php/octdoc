@@ -482,15 +482,19 @@ HTML
             border-right:   0;
             margin:         5px;
         }
+        #content {
+            text-align:     center;
+            padding:        10px;
+        }
         </style>
     </head>
     <body>
-        <center>
+        <div id="content">
             <h1>%s</h1>
             %s
+            <hr />            
             <p>Last updated: %s</p>
-            <hr />
-        </center>
+        </div>
     </body>
 </html>
 HTML
