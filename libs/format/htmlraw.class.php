@@ -246,12 +246,13 @@ namespace octdoc\format {
                         });
 
                         fputs($fp, sprintf(
-                            '<li><a href="%s"%s>%s</a>',
+                            '<li><a href="%s" title="%s"%s>%s</a>',
                             'content/' . basename($node['file']) . '.html',
+                            htmlentities($node['name']),
                             ($this->index_target != ''
                                 ? ' target="' . $this->index_target . '"'
                                 : ''),
-                            htmlentities($node['name'])
+                            htmlentities(explode('/', $node['name'])[1])
                         ));
 
                         if (!is_string(key($tree))) fputs($fp, '</li>');
@@ -259,7 +260,7 @@ namespace octdoc\format {
                         $li = false;
                     } elseif (count($node) > 0) {
                         if ($li) {
-                            fputs($fp, '<li>' . $key);
+                            fputs($fp, '<li>' . htmlentities($key));
                         }
 
                         $putList($node, $prefix . '/' . $key);
