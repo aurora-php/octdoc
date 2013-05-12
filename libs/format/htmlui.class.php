@@ -131,11 +131,10 @@ namespace octdoc\format {
             margin:                2px 0;
         }
         #toc {
-            margin-top: 24px;
             left:       0;
             right:      0;
             display:    block;
-            padding:    5px 10px;
+            padding:    10px;
         }
         #toc ul {
             padding-left: 0;
