@@ -51,6 +51,15 @@ namespace octdoc {
         /**/
 
         /**
+         * Properties imported from property registry.
+         *
+         * @octdoc  p:format/$properties
+         * @var     array                                       Property values.
+         */
+        private $properties = array();
+        /**/
+
+        /**
          * Constructor.
          *
          * @octdoc  m:octdoc/format
@@ -58,6 +67,23 @@ namespace octdoc {
         protected function __construct()
         /**/
         {
+            $this->properties = \octdoc\registry::getValue('props');
+        }
+
+        /**
+         * Return property value from property registry.
+         *
+         * @octdoc  m:format/getProperty
+         * @param   string              $name                   Name of property to return value of.
+         * @param   string              $fmt                    Optional formatting pattern.
+         * @return  string                                      Stored property value or empty string.
+         */
+        protected function getProperty($name, $fmt = '%s')
+        /**/
+        {
+            return (array_key_exists($name, $this->properties)
+                    ? sprintf($fmt, $this->properties[$name])
+                    : '');
         }
 
         /**
