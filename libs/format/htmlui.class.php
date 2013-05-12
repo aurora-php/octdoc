@@ -109,8 +109,15 @@ namespace octdoc\format {
             height:        24px;
         }
         #form form {
-            margin:  3px;
-            padding: 0;
+            margin:   0 3px;
+            padding:  0;
+        }
+        #form a.clr {
+            position:        absolute;
+            top:             0;
+            right:           10px;
+            line-height:     24px;
+            text-decoration: none;
         }
         #form form input {
             display:               block;
@@ -121,6 +128,7 @@ namespace octdoc\format {
             -webkit-border-radius: 5px;
             outline:               none;
             line-height:           1.5em;
+            margin:                2px 0;
         }
         #toc {
             margin-top: 24px;
@@ -168,6 +176,37 @@ namespace octdoc\format {
 
             var e_refs;
             var e_toc;
+            var e_form;
+
+            var e_clr = null;
+
+            function clr_show() {
+                if (e_clr == null) {
+                    e_clr = document.createElement('a');
+                    e_clr.className = 'clr'; 
+                    e_clr.innerHTML = 'X';
+                    e_clr.href      = 'javascript://';
+
+                    e_clr.onclick   = function() {
+                        var phrase = document.getElementById('phrase');
+                        phrase.value = '';
+
+                        window.setTimeout(function() {
+                            update();
+                        }, 50);
+                    };
+
+                    e_form.appendChild(e_clr);
+                }
+
+                e_clr.style.visibility = 'visible';
+            }
+
+            function clr_hide() {
+                if (e_clr == null) return;
+
+                e_clr.style.visibility = 'hidden';
+            }
 
             function update() {
                 var phrase = document.getElementById('phrase');
@@ -177,9 +216,13 @@ namespace octdoc\format {
                 if (val == '') {
                     e_refs.style.display = 'none';
                     e_toc.style.display = 'block';
+
+                    clr_hide();
                 } else {
                     e_refs.style.display = 'block';
                     e_toc.style.display = 'none';
+
+                    clr_show();
                 }
 
                 for (var name in refs) {
@@ -200,6 +243,7 @@ namespace octdoc\format {
             window.onload = function() {
                 e_refs = document.getElementById('refs');
                 e_toc  = document.getElementById('toc');
+                e_form = document.getElementById('form');
 
                 var cb = function() {
                     window.setTimeout(function() {
