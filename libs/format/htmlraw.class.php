@@ -230,11 +230,8 @@ namespace octdoc\format {
             $putList = function(array $tree, $prefix = '') use ($fp, &$refs, &$putList) {
                 fputs($fp, "<ul>\n");
 
-                array_walk($tree, function($node, $key) use ($fp, &$tree, &$refs, $prefix, $putList) {
-                    static $li = true;
-
-                    next($tree);
-
+                $li = true;
+                foreach ($tree as $key => $node) {
                     if (is_int($key)) {
                         array_walk($node['refs'], function($v) use (&$refs, $prefix, $node) {
                             $path = ltrim($prefix . '/' . $v, '/');
@@ -271,7 +268,7 @@ namespace octdoc\format {
 
                         $li = true;
                     }
-                });
+                }
 
                 fputs($fp, "</ul>\n");
             };
