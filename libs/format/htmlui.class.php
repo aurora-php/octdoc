@@ -459,11 +459,46 @@ HTML
     </head>
     <frameset cols="250,*">
         <frame name="toc" src="toc.html" />
-        <frame name="content" src="" />
+        <frame name="content" src="title.html" />
     </frameset>
 </html>
 HTML
             );
+
+            $this->output->addFile('title.html', sprintf(<<<HTML
+<html>
+    <head>
+        <style type="text/css">
+        body {
+            font-family:      Verdana, Arial, Helvetica, sans-serif;
+            font-size:        0.9em;
+            margin:           0;
+            padding:          0;
+        }
+        hr {
+            border-top:     1px #000 dotted;
+            border-left:    0;
+            border-bottom:  0;
+            border-right:   0;
+            margin:         5px;
+        }
+        </style>
+    </head>
+    <body>
+        <center>
+            <h1>%s</h1>
+            %s
+            <p>Last updated: %s</p>
+            <hr />
+        </center>
+    </body>
+</html>
+HTML
+                , 
+                $this->getProperty('title'),
+                $this->getProperty('author', '<p>copyright &copy; 2013 by %s</p>'),
+                strftime('%Y-%m-%d %H:%M:%S')
+            ));
 
             $this->output->addFile('meta.json', json_encode(array(
                 'title' => $this->title
