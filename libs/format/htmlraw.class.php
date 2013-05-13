@@ -104,6 +104,16 @@ namespace octdoc\format {
                     return $text;
                 }
             });
+
+            // enable markdown post-processor in cases where a supported markdown extension/tool is installed
+            if (extension_loaded('discount')) {
+                $this->textproc->setPreProcessor(function($text) {
+                    $md = \MarkdownDocument::createFromString($text);
+                    $md->compile();
+
+                    return $md->getHtml();
+                });
+            }
         }
 
         /**
