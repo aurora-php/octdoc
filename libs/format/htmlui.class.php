@@ -119,6 +119,7 @@ namespace octdoc\format {
             line-height:     24px;
             text-decoration: none;
             color:           #aaa;
+            font-weight:     bold;
         }
         #form a.clr:hover {
             color:           #aa0000;
@@ -374,23 +375,28 @@ HTML
             color:            #fff;
 
             border-radius:    5px;
-            margin-right:     10px;
+            margin:           5px 5px 5px 0;
             padding:          2px;
 
             display:          inline-block;
-            width:            80px;
+            width:            60px;
             text-align:       center;
 
             cursor:           pointer;
+            font-size:        0.8em;
+            font-weight:      bold;
+            text-decoration:  none;
         }
         #sidebar div.button:hover {
             background-color: #aa0000;
         }
-        #sidebar div.button a {
-            font-size:        0.9em;
-            font-weight:      bold;
-            text-decoration:  none;
-            color:            #fff;
+        #sidebar div.button.inactive {
+            opacity:          0.5;
+            cursor:           default;
+        }
+        #sidebar div.button.inactive:hover {
+            opacity:          0.5;
+            background-color: #aaa;
         }
 
         @media print {
@@ -412,6 +418,19 @@ HTML
         <script type="text/javascript">
         var octdoc = (function() {
             var o = {};
+            var sources  = [];
+            var expanded = 0;
+            var expand   = true;
+
+            function toggleButton() {
+                if (expanded == sources.length) {
+                    document.getElementById('expand_all').innerHTML = 'shrink';
+                    expand = false;
+                } else if (expanded == 0) {
+                    document.getElementById('expand_all').innerHTML = 'expand';
+                    expand = true;
+                }
+            }
 
             o.toggleSource = function(id) {
                 var s = document.getElementById('shrinked_src_' + id);
@@ -420,9 +439,33 @@ HTML
                 if (s.style.display == 'block') {
                     s.style.display = 'none';
                     e.style.display = 'block';
+
+                    ++expanded;
                 } else {
                     s.style.display = 'block';
                     e.style.display = 'none';
+
+                    --expanded;
+                }
+
+                toggleButton();
+            }
+            o.addSource = function(id) {
+                sources.push(id);
+            }
+            o.toggleSources = function() {
+                for (var i = 0, cnt = sources.length; i < cnt; ++i) {
+                    document.getElementById('shrinked_src_' + sources[i]).style.display = (expand ? 'none' : 'block');
+                    document.getElementById('expanded_src_' + sources[i]).style.display = (expand ? 'block' : 'none');
+                }
+
+                expanded = (expand ? sources.length : 0);
+
+                toggleButton();
+            }
+            o.initButton = function() {
+                if (sources.length > 0) {
+                    document.getElementById('expand_all').className = 'button';
                 }
             }
 
@@ -491,8 +534,10 @@ HTML
         <div id="sidebar">
             <h1>$this->page_title</h1>
 
-            <div class="button"><a href="javascript://" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">top</a></div><div class="button"><a href="javascript://" onclick="window.print();">print</a></div>
-
+            <div class="button" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">top</div><div class="button" onclick="window.print();">print</div><div id="expand_all" class="button inactive" onclick="octdoc.toggleSources();">expand</div>
+            <script type="text/javascript">
+            octdoc.initButton();
+            </script>
             <ul>
 HTML
             );
@@ -622,6 +667,8 @@ HTML
                 e.onclick = function() {
                     octdoc.toggleSource('$uniq_id');
                 }
+
+                octdoc.addSource('$uniq_id');
             })();
             </script>
 HTML
