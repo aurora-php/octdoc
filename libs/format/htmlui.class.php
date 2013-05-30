@@ -356,6 +356,26 @@ HTML
             }
         }
         </style>
+        <script type="text/javascript">
+        var octdoc = (function() {
+            var o = {};
+
+            o.toggleSource = function(id) {
+                var s = document.getElementById('shrinked_src_' + id);
+                var e = document.getElementById('expanded_src_' + id);
+
+                if (s.style.display == 'block') {
+                    s.style.display = 'none';
+                    e.style.display = 'block';
+                } else {
+                    s.style.display = 'block';
+                    e.style.display = 'none';
+                }
+            }
+
+            return o;
+        })();
+        </script>
     </head>
     <body>
         <div id="content">
@@ -520,6 +540,40 @@ HTML
         /**/
         {
             parent::index('toc', $doc, $source);
+        }
+
+        /**
+         * Write source code block.
+         *
+         * @octdoc  m:htmlui/source
+         * @param   resource                        $fp             File to write source code block to.
+         * @param   string                          $source         Source code block to write.
+         * @param   string                          $tpl            Template for writing source block.
+         * @return  bool                                            Returns true if source code was shrinked.
+         */
+        protected function source($fp, $source, $tpl)
+        /**/
+        {
+            $uniq_id  = uniqid('', true);
+            $shrinked = parent::source($fp, $source, sprintf('<pre id="shrinked_src_%s" style="display: block;">%%s</pre>', $uniq_id));
+
+            if ($shrinked) {
+                fputs($fp, <<<HTML
+            <pre id="expanded_src_$uniq_id" class="expanded_src" style="cursor: pointer; display: none;" onclick="octdoc.toggleSource('$uniq_id')">$source</pre>
+            <script type="text/javascript">
+            (function() {
+                var e = document.getElementById('shrinked_src_$uniq_id');
+
+                e.className    = 'shrinked_src';
+                e.style.cursor = 'pointer';
+                e.onclick = function() {
+                    octdoc.toggleSource('$uniq_id');
+                }
+            })();
+            </script>
+HTML
+                );
+            }
         }
 
         /**
