@@ -471,6 +471,26 @@ namespace octdoc\format {
 
                         $dd .= "</tbody></table>\n";
                         break;
+                    case 'example':
+                        if (is_array($attr)) {
+                            foreach ($attr as $r) {
+                                $dd .= $r['text'];
+                            }
+                        } else {
+                            $dd = $attr;
+                        }
+
+                        // cut preceeding spaces but keep indentation
+                        if (preg_match('/^( +)/', $dd, $match)) {
+                            $dd = preg_replace('/^' . $match[1] . '/m', '', $dd);
+                        }
+
+                        // remove trailing spaces and cut off last newline
+                        $dd = preg_replace('/[ ]+$/m', '', rtrim($dd));
+
+                        // wrap source code
+                        $dd = sprintf('<pre>%s</pre>', $dd);
+                        break;
                     default:
                         if (is_array($attr)) {
                             foreach ($attr as $r) {
