@@ -298,9 +298,29 @@ HTML
             background-color: #eee;
         }
         pre {
+            position:         relative;
             border:           1px solid #ccc;
             background-color: #ffeecc;
             padding:          5px;
+        }
+        pre.shrinked_src:before, pre.expanded_src:before {
+            position:    absolute;
+            font-size:   2em;
+            left:        0;
+            bottom:      0;
+            width:       100%;
+            text-align:  center;
+
+            color:       #aaa;
+
+            font-family:     Verdana, Arial, Helvetica, sans-serif;
+            font-size:       0.8em;
+        }
+        pre.shrinked_src:before {
+            content:     "\\25BC  expand \\25BC";
+        }
+        pre.expanded_src:before {
+            content:     "\\25B2  shrink \\25B2";
         }
         a {
             color:            #aa0000;
