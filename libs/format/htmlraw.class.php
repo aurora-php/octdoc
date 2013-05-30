@@ -499,6 +499,13 @@ namespace octdoc\format {
                         } else {
                             $dd = $this->textproc->process($attr);
                         }
+
+                        switch ($name) {
+                        case 'note':
+                            $dd = sprintf('<div class="note">%s</div>', $dd);
+                            break;
+                        }
+
                         break;
                     }
 

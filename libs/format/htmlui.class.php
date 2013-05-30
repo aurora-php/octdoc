@@ -361,6 +361,26 @@ HTML
             margin:         10px 0 5px 0;
             border-bottom:  1px dotted #777;
         }
+        #content dd .note {
+            position:         relative;
+
+            border:           1px solid #aa0000;
+            background-color: #ffcccc;
+            padding:          0 15px 0 50px;
+        }
+        #content dd .note:before {
+            position:         absolute;
+
+            font-size:        32px;
+            font-weight:      bold;
+            color:            #aa0000;
+            content:          "\\26A0";
+
+            top:              50%;
+            left:             10px;
+            margin-top:       -16px;
+            line-height:      32px;
+        }
         #sidebar {
             position: fixed;
             top:      10px;
