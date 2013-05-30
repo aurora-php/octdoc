@@ -369,6 +369,29 @@ HTML
             padding-left: 1em;
             text-indent:  -1em;
         }
+        #sidebar div.button {
+            background-color: #aaa;
+            color:            #fff;
+
+            border-radius:    5px;
+            margin-right:     10px;
+            padding:          2px;
+
+            display:          inline-block;
+            width:            80px;
+            text-align:       center;
+
+            cursor:           pointer;
+        }
+        #sidebar div.button:hover {
+            background-color: #aa0000;
+        }
+        #sidebar div.button a {
+            font-size:        0.9em;
+            font-weight:      bold;
+            text-decoration:  none;
+            color:            #fff;
+        }
 
         @media print {
             #sidebar {
@@ -462,7 +485,7 @@ HTML
         <div id="sidebar">
             <h1>$this->page_title</h1>
 
-            [<a href="javascript://" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">top</a>]&nbsp;[<a href="javascript://" onclick="window.print();">print</a>]
+            <div class="button"><a href="javascript://" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">top</a></div><div class="button"><a href="javascript://" onclick="window.print();">print</a></div>
 
             <ul>
 HTML
