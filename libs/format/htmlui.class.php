@@ -118,6 +118,10 @@ namespace octdoc\format {
             right:           10px;
             line-height:     24px;
             text-decoration: none;
+            color:           #aaa;
+        }
+        #form a.clr:hover {
+            color:           #aa0000;
         }
         #form form input {
             display:               block;
@@ -183,7 +187,7 @@ namespace octdoc\format {
                 if (e_clr == null) {
                     e_clr = document.createElement('a');
                     e_clr.className = 'clr'; 
-                    e_clr.innerHTML = 'X';
+                    e_clr.innerHTML = '&times;';
                     e_clr.href      = 'javascript://';
 
                     e_clr.onclick   = function() {
