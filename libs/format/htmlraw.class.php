@@ -380,7 +380,7 @@ namespace octdoc\format {
                     // renove trailing spaces and cut off last newline
                     $tmp = preg_replace('/[ ]+$/m', '', rtrim($tmp));
 
-                    // remove source lines, if there are too much
+                    // remove source lines, if there are too many
                     if (substr_count($tmp, "\n") > \octdoc\def::$source_lines) {
                         $tmp = preg_split("/\n/", $tmp, \octdoc\def::$source_lines + 1);
                         $tmp = array_reverse($tmp);
