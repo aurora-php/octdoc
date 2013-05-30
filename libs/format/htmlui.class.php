@@ -394,6 +394,12 @@ HTML
         }
 
         @media print {
+            pre.shrinked_src:before {
+                content: "";
+            }
+            pre.expanded_src:before {
+                content: "";
+            }
             #sidebar {
                 display: none;
             }
