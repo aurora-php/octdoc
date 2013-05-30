@@ -377,7 +377,7 @@ namespace octdoc\format {
                         $tmp = preg_replace('/^' . $match[1] . '/m', '', $tmp);
                     }
 
-                    // renove trailing spaces and cut off last newline
+                    // remove trailing spaces and cut off last newline
                     $tmp = preg_replace('/[ ]+$/m', '', rtrim($tmp));
 
                     // remove source lines, if there are too many
