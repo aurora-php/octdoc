@@ -307,6 +307,9 @@ HTML
             border:           1px solid #ccc;
             background-color: #ffeecc;
             padding:          5px;
+
+            white-space:      pre-wrap;
+            word-wrap:        break-word;
         }
         pre.shrinked_src:before, pre.expanded_src:before {
             position:    absolute;
