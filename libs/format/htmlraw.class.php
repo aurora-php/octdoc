@@ -318,6 +318,48 @@ namespace octdoc\format {
         }
 
         /**
+         * Write source code block.
+         *
+         * @octdoc  m:htmlraw/source
+         * @param   resource                        $fp             File to write source code block to.
+         * @param   string                          $source         Source code block to write.
+         * @param   string                          $tpl            Template for writing source block.
+         * @return  bool                                            Returns true if source code was shrinked.
+         */
+        protected function source($fp, $source, $tpl)
+        /**/
+        {
+            $return = false;
+
+            if (substr_count($source, "\n") > \octdoc\def::$source_lines) {
+                $source = preg_split("/\n/", $source, \octdoc\def::$source_lines + 1);
+                $source = array_reverse($source);
+                array_shift($source);
+
+                while (count($source) > 0 && trim($source[0]) === '') {
+                    array_shift($source);
+                }
+
+                if (count($source) > 0) {
+                    preg_match('/^[ ]*/', $source[0], $match);
+
+                    $source = array_reverse($source);
+
+                    $source[] = $match[0] . '...';
+                    $source = implode("\n", $source);
+
+                    $return = true;
+                } else {
+                    $source = '';
+                }
+            }
+
+            if ($source != '') fputs($fp, sprintf(rtrim($tpl) . "\n", htmlentities($source)));
+
+            return $return;
+        }
+
+        /**
          * Write documentation for a specified file.
          *
          * @octdoc  m:htmlraw/page
@@ -381,29 +423,7 @@ namespace octdoc\format {
                     $tmp = preg_replace('/[ ]+$/m', '', rtrim($tmp));
 
                     // remove source lines, if there are too many
-                    if (substr_count($tmp, "\n") > \octdoc\def::$source_lines) {
-                        $tmp = preg_split("/\n/", $tmp, \octdoc\def::$source_lines + 1);
-                        $tmp = array_reverse($tmp);
-                        array_shift($tmp);
-
-                        while (count($tmp) > 0 && trim($tmp[0]) === '') {
-                            array_shift($tmp);
-                        }
-
-                        if (count($tmp) > 0) {
-                            preg_match('/^[ ]*/', $tmp[0], $match);
-
-                            $tmp = array_reverse($tmp);
-
-                            $tmp[] = $match[0] . '...';
-                            $tmp = implode("\n", $tmp);
-                        } else {
-                            $tmp = '';
-                        }
-
-                    }
-
-                    if ($tmp != '') fputs($fp, sprintf("<pre>%s</pre>\n", htmlentities($tmp)));
+                    $this->source($fp, $tmp, '<pre>%s</pre>');
                 }
 
                 // write additional attributes
