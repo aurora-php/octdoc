@@ -82,6 +82,8 @@ namespace octdoc {
                 print "    " . implode("\n    ", $formats) . "\n\n";
                 print "targets\n\n";
                 print "    " . implode("\n    ", $targets) . "\n\n";
+                print "extensions\n\n";
+                printf("    [%s] markdown\n\n", (extension_loaded('discount') ? 'X' : ' '));
                 die(0);
             }
 
