@@ -36,7 +36,7 @@ namespace octdoc\format {
          * Target for index links.
          *
          * @octdoc  m:htmlui/$index_target
-         * @var     string
+         * @type    string
          */
         protected $index_target = 'content';
         /**/
@@ -45,7 +45,7 @@ namespace octdoc\format {
          * Title of current page.
          *
          * @octdoc  m:htmlui/$page_title
-         * @var     string
+         * @type    string
          */
         protected $page_title = '';
         /**/

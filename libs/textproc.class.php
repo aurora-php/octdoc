@@ -37,7 +37,7 @@ namespace octdoc {
          * PreProcessor callback.
          *
          * @octdoc  p:octdoc/$pre_processor
-         * @var     callable
+         * @type    callable
          */
         protected $pre_processor;
         /**/
@@ -46,7 +46,7 @@ namespace octdoc {
          * PostProcessor callback.
          *
          * @octdoc  p:octdoc/$post_processor
-         * @var     callable
+         * @type    callable
          */
         protected $post_processor;
         /**/
@@ -55,7 +55,7 @@ namespace octdoc {
          * Event handler.
          *
          * @octdoc  p:octdoc/$event_handler
-         * @var     callable
+         * @type    callable
          */
         protected $event_handler;
         /**/

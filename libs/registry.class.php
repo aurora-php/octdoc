@@ -34,7 +34,7 @@ namespace octdoc {
          * Storage for registered data.
          *
          * @octdoc  p:registry/$data
-         * @var     array
+         * @type    array
          */
         protected static $data = array();
         /**/

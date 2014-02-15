@@ -36,7 +36,7 @@ namespace octdoc\format {
          * Reference cataloge.
          *
          * @octdoc  p:htmlraw/$references
-         * @var     array
+         * @type    array
          */
         protected $references = array();
         /**/
@@ -45,7 +45,7 @@ namespace octdoc\format {
          * References within a page.
          *
          * @octdoc  m:htmlraw/$page_references
-         * @var     array
+         * @type    array
          */
         protected $page_references = array();
         /**/
@@ -54,7 +54,7 @@ namespace octdoc\format {
          * Target for index links.
          *
          * @octdoc  m:htmlraw/$index_target
-         * @var     string
+         * @type    string
          */
         protected $index_target = '';
         /**/
@@ -63,7 +63,7 @@ namespace octdoc\format {
          * Output handler.
          *
          * @octdoc  p:htmlraw/$output
-         * @var     \octdoc\output
+         * @type    \octdoc\output
          */
         protected $output;
         /**/
@@ -72,7 +72,7 @@ namespace octdoc\format {
          * Instance of text processor.
          *
          * @octdoc  p:htmlraw/$textproc
-         * @var     \octdoc\textproc
+         * @type    \octdoc\textproc
          */
         protected $textproc;
         /**/

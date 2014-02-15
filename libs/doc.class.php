@@ -36,7 +36,7 @@ namespace octdoc {
          * Output format.
          *
          * @octdoc  p:doc/$format
-         * @var     string
+         * @type    string
          */
         protected $format = 'htmlraw';
         /**/
@@ -45,7 +45,7 @@ namespace octdoc {
          * Output target type.
          *
          * @octdoc  p:doc/$output
-         * @var     string
+         * @type    string
          */
         protected $output = 'tar';
         /**/
@@ -54,7 +54,7 @@ namespace octdoc {
          * Docblock definitions.
          *
          * @octdoc  p:doc/$docblock
-         * @var     array
+         * @type    array
          */
         protected $docblock = array(
             '/**'   => array(
@@ -94,7 +94,7 @@ namespace octdoc {
          * Configuration of files to parse documentation in.
          *
          * @octdoc  p:doc/$extensions
-         * @var     array
+         * @type    array
          */
         protected $files = array(
             '.+\.lua$', '.+\.erl$', '.+\.php$', '.+\.js$', '.+\.css$', '^Makefile(|\..+)$'
@@ -105,7 +105,7 @@ namespace octdoc {
          * Directories to scan for creating documentation.
          *
          * @octdoc  p:doc/$directories
-         * @var     array
+         * @type    array
          */
         protected $directories = array(
             '^/'
@@ -116,7 +116,7 @@ namespace octdoc {
          * Directories to skip when creating documentation.
          *
          * @octdoc  p:doc/$skip_directories
-         * @var     array
+         * @type    array
          */
         protected $skip_directories = array(
             '/CVS/', '/\.svn/', '^/\.git/',
@@ -131,7 +131,7 @@ namespace octdoc {
          * Extensions to strip from filenames.
          *
          * @octdoc  p:doc/$strip_extensions
-         * @var     array
+         * @type    array
          */
         protected $strip_extensions = array(
             '\.class\.php$', '\.inc\.php$', '\.php$', '\.js$', '\.css$', '\.erl$', '\.lua$'

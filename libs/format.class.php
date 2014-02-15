@@ -36,7 +36,7 @@ namespace octdoc {
          * Stores a map of the supported formats and the class implementing a format.
          *
          * @octdoc  p:format/$formats
-         * @var     array
+         * @type    array
          */
         private static $formats = array();
         /**/
@@ -45,7 +45,7 @@ namespace octdoc {
          * Documentation title.
          *
          * @octdoc  p:format/$title
-         * @var     string                                      Documentation title.
+         * @type    string                                      Documentation title.
          */
         protected $title = '';
         /**/

@@ -36,7 +36,7 @@ namespace octdoc {
          * Docblock types.
          *
          * @octdoc  p:def/$types
-         * @var     array
+         * @type    array
          */
         public static $types = array(
             'a' => 'Abstract',
@@ -57,7 +57,7 @@ namespace octdoc {
          * Docblock attributes. This defines all supported docblocks
          *
          * @octdoc  p:def/$attributes
-         * @var     array
+         * @type    array
          */
         public static $attributes = array(
             'author'    => 'Author',
@@ -74,7 +74,7 @@ namespace octdoc {
          * Documentation sections.
          *
          * @octdoc  p:def/$sections
-         * @var     array
+         * @type    array
          */
         public static $sections = array(
             'libs'     => 'Libraries',
@@ -91,7 +91,7 @@ namespace octdoc {
          * Sorting criteria configuration.
          *
          * @octdoc  p:def/$sort
-         * @var     array
+         * @type    array
          */
         public static $sort = array(
             'types' => array(
@@ -125,7 +125,8 @@ namespace octdoc {
                 'param',
                 'return',
                 'throws',
-                'todo'
+                'todo',
+                'type'
             ),
             'sections' => array(
                 'libs', 'libsjs', 'styles', 'tools', 'src', 'includes'
@@ -140,7 +141,7 @@ namespace octdoc {
          * Documentation depth.
          *
          * @octdoc  p:def/$depth
-         * @var     array
+         * @type    array
          */
         public static $depth = array(
             'h' => 1,
@@ -156,7 +157,7 @@ namespace octdoc {
          * Number of maximum lines to include in source block.
          *
          * @octdoc  p:def/$source_lines
-         * @var     int
+         * @type    int
          */
         public static $source_lines = 9;
         /**/
