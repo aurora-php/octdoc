@@ -118,6 +118,7 @@ namespace octdoc {
                 'reference',
                 'doc',
                 'tutorial',
+                'note',
                 'example',
                 'abstract',
                 'static',

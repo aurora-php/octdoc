@@ -86,6 +86,8 @@ namespace octdoc\format {
         public function __construct(\octdoc\output $output)
         /**/
         {
+            parent::__construct();
+
             $this->output   = $output;
             $this->textproc = new \octdoc\textproc();
             $this->textproc->setEventHandler(function($evt, $text) {
@@ -102,6 +104,16 @@ namespace octdoc\format {
                     return $text;
                 }
             });
+
+            // enable markdown post-processor in cases where a supported markdown extension/tool is installed
+            if (extension_loaded('discount')) {
+                $this->textproc->setPreProcessor(function($text) {
+                    $md = \MarkdownDocument::createFromString($text);
+                    $md->compile();
+
+                    return $md->getHtml();
+                });
+            }
         }
 
         /**
@@ -230,11 +242,8 @@ namespace octdoc\format {
             $putList = function(array $tree, $prefix = '') use ($fp, &$refs, &$putList) {
                 fputs($fp, "<ul>\n");
 
-                array_walk($tree, function($node, $key) use ($fp, &$tree, &$refs, $prefix, $putList) {
-                    static $li = true;
-
-                    next($tree);
-
+                $li = true;
+                foreach ($tree as $key => $node) {
                     if (is_int($key)) {
                         array_walk($node['refs'], function($v) use (&$refs, $prefix, $node) {
                             $path = ltrim($prefix . '/' . $v, '/');
@@ -249,12 +258,13 @@ namespace octdoc\format {
                         });
 
                         fputs($fp, sprintf(
-                            '<li><a href="%s"%s>%s</a>',
+                            '<li><a href="%s" title="%s"%s>%s</a>',
                             'content/' . basename($node['file']) . '.html',
+                            htmlentities($node['name']),
                             ($this->index_target != ''
                                 ? ' target="' . $this->index_target . '"'
                                 : ''),
-                            htmlentities($node['name'])
+                            htmlentities(explode('/', $node['name'])[1])
                         ));
 
                         if (!is_string(key($tree))) fputs($fp, '</li>');
@@ -262,7 +272,7 @@ namespace octdoc\format {
                         $li = false;
                     } elseif (count($node) > 0) {
                         if ($li) {
-                            fputs($fp, '<li>' . $key);
+                            fputs($fp, '<li>' . htmlentities($key));
                         }
 
                         $putList($node, $prefix . '/' . $key);
@@ -271,7 +281,7 @@ namespace octdoc\format {
 
                         $li = true;
                     }
-                });
+                }
 
                 fputs($fp, "</ul>\n");
             };
@@ -305,6 +315,48 @@ namespace octdoc\format {
             $this->output->addFile($file, stream_get_contents($fp));
 
             fclose($fp);
+        }
+
+        /**
+         * Write source code block.
+         *
+         * @octdoc  m:htmlraw/source
+         * @param   resource                        $fp             File to write source code block to.
+         * @param   string                          $source         Source code block to write.
+         * @param   string                          $tpl            Template for writing source block.
+         * @return  bool                                            Returns true if source code was shrinked.
+         */
+        protected function source($fp, $source, $tpl)
+        /**/
+        {
+            $return = false;
+
+            if (substr_count($source, "\n") > \octdoc\def::$source_lines) {
+                $source = preg_split("/\n/", $source, \octdoc\def::$source_lines + 1);
+                $source = array_reverse($source);
+                array_shift($source);
+
+                while (count($source) > 0 && trim($source[0]) === '') {
+                    array_shift($source);
+                }
+
+                if (count($source) > 0) {
+                    preg_match('/^[ ]*/', $source[0], $match);
+
+                    $source = array_reverse($source);
+
+                    $source[] = $match[0] . '...';
+                    $source = implode("\n", $source);
+
+                    $return = true;
+                } else {
+                    $source = '';
+                }
+            }
+
+            if ($source != '') fputs($fp, sprintf(rtrim($tpl) . "\n", htmlentities($source)));
+
+            return $return;
         }
 
         /**
@@ -367,33 +419,11 @@ namespace octdoc\format {
                         $tmp = preg_replace('/^' . $match[1] . '/m', '', $tmp);
                     }
 
-                    // renove trailing spaces and cut off last newline
+                    // remove trailing spaces and cut off last newline
                     $tmp = preg_replace('/[ ]+$/m', '', rtrim($tmp));
 
-                    // remove source lines, if there are too much
-                    if (substr_count($tmp, "\n") > \octdoc\def::$source_lines) {
-                        $tmp = preg_split("/\n/", $tmp, \octdoc\def::$source_lines + 1);
-                        $tmp = array_reverse($tmp);
-                        array_shift($tmp);
-
-                        while (count($tmp) > 0 && trim($tmp[0]) === '') {
-                            array_shift($tmp);
-                        }
-
-                        if (count($tmp) > 0) {
-                            preg_match('/^[ ]*/', $tmp[0], $match);
-
-                            $tmp = array_reverse($tmp);
-
-                            $tmp[] = $match[0] . '...';
-                            $tmp = implode("\n", $tmp);
-                        } else {
-                            $tmp = '';
-                        }
-
-                    }
-
-                    if ($tmp != '') fputs($fp, sprintf("<pre>%s</pre>\n", htmlentities($tmp)));
+                    // remove source lines, if there are too many
+                    $this->source($fp, $tmp, '<pre>%s</pre>');
                 }
 
                 // write additional attributes
@@ -441,6 +471,26 @@ namespace octdoc\format {
 
                         $dd .= "</tbody></table>\n";
                         break;
+                    case 'example':
+                        if (is_array($attr)) {
+                            foreach ($attr as $r) {
+                                $dd .= $r['text'];
+                            }
+                        } else {
+                            $dd = $attr;
+                        }
+
+                        // cut preceeding spaces but keep indentation
+                        if (preg_match('/^( +)/', $dd, $match)) {
+                            $dd = preg_replace('/^' . $match[1] . '/m', '', $dd);
+                        }
+
+                        // remove trailing spaces and cut off last newline
+                        $dd = preg_replace('/[ ]+$/m', '', rtrim($dd));
+
+                        // wrap source code
+                        $dd = sprintf('<pre>%s</pre>', $dd);
+                        break;
                     default:
                         if (is_array($attr)) {
                             foreach ($attr as $r) {
@@ -449,6 +499,13 @@ namespace octdoc\format {
                         } else {
                             $dd = $this->textproc->process($attr);
                         }
+
+                        switch ($name) {
+                        case 'note':
+                            $dd = sprintf('<div class="note">%s</div>', $dd);
+                            break;
+                        }
+
                         break;
                     }
 

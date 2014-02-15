@@ -109,8 +109,20 @@ namespace octdoc\format {
             height:        24px;
         }
         #form form {
-            margin:  3px;
-            padding: 0;
+            margin:   0 3px;
+            padding:  0;
+        }
+        #form a.clr {
+            position:        absolute;
+            top:             0;
+            right:           10px;
+            line-height:     24px;
+            text-decoration: none;
+            color:           #aaa;
+            font-weight:     bold;
+        }
+        #form a.clr:hover {
+            color:           #aa0000;
         }
         #form form input {
             display:               block;
@@ -121,13 +133,13 @@ namespace octdoc\format {
             -webkit-border-radius: 5px;
             outline:               none;
             line-height:           1.5em;
+            margin:                2px 0;
         }
         #toc {
-            margin-top: 24px;
             left:       0;
             right:      0;
             display:    block;
-            padding:    5px 10px;
+            padding:    10px;
         }
         #toc ul {
             padding-left: 0;
@@ -168,6 +180,37 @@ namespace octdoc\format {
 
             var e_refs;
             var e_toc;
+            var e_form;
+
+            var e_clr = null;
+
+            function clr_show() {
+                if (e_clr == null) {
+                    e_clr = document.createElement('a');
+                    e_clr.className = 'clr'; 
+                    e_clr.innerHTML = '&times;';
+                    e_clr.href      = 'javascript://';
+
+                    e_clr.onclick   = function() {
+                        var phrase = document.getElementById('phrase');
+                        phrase.value = '';
+
+                        window.setTimeout(function() {
+                            update();
+                        }, 50);
+                    };
+
+                    e_form.appendChild(e_clr);
+                }
+
+                e_clr.style.visibility = 'visible';
+            }
+
+            function clr_hide() {
+                if (e_clr == null) return;
+
+                e_clr.style.visibility = 'hidden';
+            }
 
             function update() {
                 var phrase = document.getElementById('phrase');
@@ -177,9 +220,13 @@ namespace octdoc\format {
                 if (val == '') {
                     e_refs.style.display = 'none';
                     e_toc.style.display = 'block';
+
+                    clr_hide();
                 } else {
                     e_refs.style.display = 'block';
                     e_toc.style.display = 'none';
+
+                    clr_show();
                 }
 
                 for (var name in refs) {
@@ -200,6 +247,7 @@ namespace octdoc\format {
             window.onload = function() {
                 e_refs = document.getElementById('refs');
                 e_toc  = document.getElementById('toc');
+                e_form = document.getElementById('form');
 
                 var cb = function() {
                     window.setTimeout(function() {
@@ -255,9 +303,32 @@ HTML
             background-color: #eee;
         }
         pre {
+            position:         relative;
             border:           1px solid #ccc;
             background-color: #ffeecc;
             padding:          5px;
+
+            white-space:      pre-wrap;
+            word-wrap:        break-word;
+        }
+        pre.shrinked_src:before, pre.expanded_src:before {
+            position:    absolute;
+            font-size:   2em;
+            left:        0;
+            bottom:      0;
+            width:       100%;
+            text-align:  center;
+
+            color:       #aaa;
+
+            font-family:     Verdana, Arial, Helvetica, sans-serif;
+            font-size:       0.8em;
+        }
+        pre.shrinked_src:before {
+            content:     "\\25BC  expand \\25BC";
+        }
+        pre.expanded_src:before {
+            content:     "\\25B2  shrink \\25B2";
         }
         a {
             color:            #aa0000;
@@ -290,6 +361,26 @@ HTML
             margin:         10px 0 5px 0;
             border-bottom:  1px dotted #777;
         }
+        #content dd .note {
+            position:         relative;
+
+            border:           1px solid #aa0000;
+            background-color: #ffcccc;
+            padding:          0 15px 0 50px;
+        }
+        #content dd .note:before {
+            position:         absolute;
+
+            font-size:        32px;
+            font-weight:      bold;
+            color:            #aa0000;
+            content:          "\\26A0";
+
+            top:              50%;
+            left:             10px;
+            margin-top:       -16px;
+            line-height:      32px;
+        }
         #sidebar {
             position: fixed;
             top:      10px;
@@ -302,8 +393,42 @@ HTML
             padding-left: 1em;
             text-indent:  -1em;
         }
+        #sidebar div.button {
+            background-color: #aaa;
+            color:            #fff;
+
+            border-radius:    5px;
+            margin:           5px 5px 5px 0;
+            padding:          2px;
+
+            display:          inline-block;
+            width:            60px;
+            text-align:       center;
+
+            cursor:           pointer;
+            font-size:        0.8em;
+            font-weight:      bold;
+            text-decoration:  none;
+        }
+        #sidebar div.button:hover {
+            background-color: #aa0000;
+        }
+        #sidebar div.button.inactive {
+            opacity:          0.5;
+            cursor:           default;
+        }
+        #sidebar div.button.inactive:hover {
+            opacity:          0.5;
+            background-color: #aaa;
+        }
 
         @media print {
+            pre.shrinked_src:before {
+                content: "";
+            }
+            pre.expanded_src:before {
+                content: "";
+            }
             #sidebar {
                 display: none;
             }
@@ -313,6 +438,63 @@ HTML
             }
         }
         </style>
+        <script type="text/javascript">
+        var octdoc = (function() {
+            var o = {};
+            var sources  = [];
+            var expanded = 0;
+            var expand   = true;
+
+            function toggleButton() {
+                if (expanded == sources.length) {
+                    document.getElementById('expand_all').innerHTML = 'shrink';
+                    expand = false;
+                } else if (expanded == 0) {
+                    document.getElementById('expand_all').innerHTML = 'expand';
+                    expand = true;
+                }
+            }
+
+            o.toggleSource = function(id) {
+                var s = document.getElementById('shrinked_src_' + id);
+                var e = document.getElementById('expanded_src_' + id);
+
+                if (s.style.display == 'block') {
+                    s.style.display = 'none';
+                    e.style.display = 'block';
+
+                    ++expanded;
+                } else {
+                    s.style.display = 'block';
+                    e.style.display = 'none';
+
+                    --expanded;
+                }
+
+                toggleButton();
+            }
+            o.addSource = function(id) {
+                sources.push(id);
+            }
+            o.toggleSources = function() {
+                for (var i = 0, cnt = sources.length; i < cnt; ++i) {
+                    document.getElementById('shrinked_src_' + sources[i]).style.display = (expand ? 'none' : 'block');
+                    document.getElementById('expanded_src_' + sources[i]).style.display = (expand ? 'block' : 'none');
+                }
+
+                expanded = (expand ? sources.length : 0);
+
+                toggleButton();
+            }
+            o.initButton = function() {
+                if (sources.length > 0) {
+                    document.getElementById('expand_all').className = 'button';
+                }
+            }
+
+            return o;
+        })();
+        </script>
     </head>
     <body>
         <div id="content">
@@ -375,8 +557,10 @@ HTML
         <div id="sidebar">
             <h1>$this->page_title</h1>
 
-            [<a href="javascript://" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">top</a>]&nbsp;[<a href="javascript://" onclick="window.print();">print</a>]
-
+            <div class="button" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">top</div><div class="button" onclick="window.print();">print</div><div id="expand_all" class="button inactive" onclick="octdoc.toggleSources();">expand</div>
+            <script type="text/javascript">
+            octdoc.initButton();
+            </script>
             <ul>
 HTML
             );
@@ -415,11 +599,50 @@ HTML
     </head>
     <frameset cols="250,*">
         <frame name="toc" src="toc.html" />
-        <frame name="content" src="" />
+        <frame name="content" src="title.html" />
     </frameset>
 </html>
 HTML
             );
+
+            $this->output->addFile('title.html', sprintf(<<<HTML
+<html>
+    <head>
+        <style type="text/css">
+        body {
+            font-family:      Verdana, Arial, Helvetica, sans-serif;
+            font-size:        0.9em;
+            margin:           0;
+            padding:          0;
+        }
+        hr {
+            border-top:     1px #000 dotted;
+            border-left:    0;
+            border-bottom:  0;
+            border-right:   0;
+            margin:         5px;
+        }
+        #content {
+            text-align:     center;
+            padding:        10px;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            <h1>%s</h1>
+            %s
+            <hr />            
+            <p>Last updated: %s</p>
+        </div>
+    </body>
+</html>
+HTML
+                , 
+                $this->getProperty('title'),
+                $this->getProperty('author', '<p>copyright &copy; 2013 by %s</p>'),
+                strftime('%Y-%m-%d %H:%M:%S')
+            ));
 
             $this->output->addFile('meta.json', json_encode(array(
                 'title' => $this->title
@@ -438,6 +661,42 @@ HTML
         /**/
         {
             parent::index('toc', $doc, $source);
+        }
+
+        /**
+         * Write source code block.
+         *
+         * @octdoc  m:htmlui/source
+         * @param   resource                        $fp             File to write source code block to.
+         * @param   string                          $source         Source code block to write.
+         * @param   string                          $tpl            Template for writing source block.
+         * @return  bool                                            Returns true if source code was shrinked.
+         */
+        protected function source($fp, $source, $tpl)
+        /**/
+        {
+            $uniq_id  = uniqid('', true);
+            $shrinked = parent::source($fp, $source, sprintf('<pre id="shrinked_src_%s" style="display: block;">%%s</pre>', $uniq_id));
+
+            if ($shrinked) {
+                fputs($fp, <<<HTML
+            <pre id="expanded_src_$uniq_id" class="expanded_src" style="cursor: pointer; display: none;" onclick="octdoc.toggleSource('$uniq_id')">$source</pre>
+            <script type="text/javascript">
+            (function() {
+                var e = document.getElementById('shrinked_src_$uniq_id');
+
+                e.className    = 'shrinked_src';
+                e.style.cursor = 'pointer';
+                e.onclick = function() {
+                    octdoc.toggleSource('$uniq_id');
+                }
+
+                octdoc.addSource('$uniq_id');
+            })();
+            </script>
+HTML
+                );
+            }
         }
 
         /**
