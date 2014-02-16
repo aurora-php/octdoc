@@ -313,7 +313,7 @@ HTML
             white-space:      -pre-wrap;
             white-space:      -o-pre-wrap;
             word-wrap:        break-word;
-            padding-left:     25px;
+            padding-left:     30px;
             text-indent:      -25px;
         }
         pre.shrinked_src:before, pre.expanded_src:before {
