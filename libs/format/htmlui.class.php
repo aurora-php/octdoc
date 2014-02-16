@@ -309,7 +309,12 @@ HTML
             padding:          5px;
 
             white-space:      pre-wrap;
+            white-space:      -moz-pre-wrap;
+            white-space:      -pre-wrap;
+            white-space:      -o-pre-wrap;
             word-wrap:        break-word;
+            padding-left:     25px;
+            text-indent:      -25px;
         }
         pre.shrinked_src:before, pre.expanded_src:before {
             position:    absolute;
