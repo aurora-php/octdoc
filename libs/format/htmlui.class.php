@@ -597,17 +597,18 @@ HTML
         public function postprocess()
         /**/
         {
-            $this->output->addFile('index.html', <<<HTML
+            $this->output->addFile('index.html', sprintf(<<<HTML
 <html>
     <head>
         <title>$this->title</title>
     </head>
     <frameset cols="250,*">
-        <frame name="toc" src="toc.html" />
-        <frame name="content" src="title.html" />
+        <frame name="toc" src="toc.html?%s" />
+        <frame name="content" src="title.html?%s" />
     </frameset>
 </html>
 HTML
+                , time(), time())
             );
 
             $this->output->addFile('title.html', sprintf(<<<HTML
