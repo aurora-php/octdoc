@@ -684,8 +684,8 @@ HTML
             $shrinked = parent::source($fp, $source, sprintf('<pre id="shrinked_src_%s" style="display: block;">%%s</pre>', $uniq_id));
 
             if ($shrinked) {
-                fputs($fp, <<<HTML
-            <pre id="expanded_src_$uniq_id" class="expanded_src" style="cursor: pointer; display: none;" onclick="octdoc.toggleSource('$uniq_id')">$source</pre>
+                fputs($fp, sprintf(<<<HTML
+            <pre id="expanded_src_$uniq_id" class="expanded_src" style="cursor: pointer; display: none;" onclick="octdoc.toggleSource('$uniq_id')">%s</pre>
             <script type="text/javascript">
             (function() {
                 var e = document.getElementById('shrinked_src_$uniq_id');
@@ -700,6 +700,7 @@ HTML
             })();
             </script>
 HTML
+                    , htmlentities($source))
                 );
             }
         }
