@@ -1,3 +1,6 @@
+DEPRECATED
+==========
+
 octdoc - Source documentation extractor
 =======================================
 
